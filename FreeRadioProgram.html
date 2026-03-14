@@ -16,35 +16,35 @@
   </head>
   <body>
     <div id="loader-wrapper">
-      <div class="loader-logo">CRA News Dashboard <br>ข่าวโทรทัศน์</div>
-      <div class="progress-container"><div class="progress-bar-fill" id="progressBar"></div></div>
-      <div class="progress-text">กำลังวิเคราะห์ข้อมูล... <span id="progressText" style="color: var(--cra-blue); font-weight: 700;">0</span>%</div>
+      <div class="loader-logo">CRA News Dashboard <br>ข่าววิทยุ</div>
+      <div class="progress-container"><div class="progress-bar-fill" id="progressBar" style="background-color: #10b981;"></div></div>
+      <div class="progress-text">กำลังวิเคราะห์ข้อมูล... <span id="progressText" style="color: #10b981; font-weight: 700;">0</span>%</div>
     </div>
 
     <div class="container-fluid py-4 px-md-5">
       <div class="top-nav">
         <a href="index.html" class="btn-back"><i class="bi bi-arrow-left"></i> กลับหน้าหลัก</a>
         <span class="nav-divider">↹</span>
-        <span class="text-muted" style="font-size: 0.9rem;">Dashboard ข่าวโทรทัศน์</span>
+        <span class="text-muted" style="font-size: 0.9rem;">Dashboard ข่าววิทยุ</span>
       </div>
 
       <div class="row mb-4 g-4 align-items-stretch">
         <div class="col-xl-5 col-lg-6">
-          <div class="cra-card h-100 d-flex flex-column justify-content-center align-items-start" style="border-left: 6px solid var(--cra-orange); padding: 20px 30px;">
+          <div class="cra-card h-100 d-flex flex-column justify-content-center align-items-start" style="border-left: 6px solid #10b981; padding: 20px 30px;">
             <div class="d-flex align-items-center">
-              <div class="menu-icon-box mb-0 me-3" style="width: 56px; height: 56px; font-size: 24px; background: rgba(234, 88, 12, 0.1); color: var(--cra-orange); border-radius: 14px; display: flex; justify-content: center; align-items: center;">
-                <i class="bi bi-tv-fill"></i>
+              <div class="menu-icon-box mb-0 me-3" style="width: 56px; height: 56px; font-size: 24px; background: rgba(16, 185, 129, 0.1); color: #10b981; border-radius: 14px; display: flex; justify-content: center; align-items: center;">
+                <i class="bi bi-broadcast"></i>
               </div>
               <div>
                 <p class="text-muted small fw-bold mb-1">ยอด PR Value รวม (บาท)</p>
-                <div class="fw-bold" style="font-size: 2.2rem; color: var(--cra-orange); line-height: 1.1;" id="sumPR">กำลังคำนวณ...</div>
+                <div class="fw-bold" style="font-size: 2.2rem; color: #10b981; line-height: 1.1;" id="sumPR">กำลังคำนวณ...</div>
               </div>
             </div>
           </div>
         </div>
 
         <div class="col-xl-3 col-lg-6">
-          <div class="cra-card h-100 d-flex flex-column justify-content-center align-items-start" style="border-left: 6px solid #10b981; padding: 20px 30px;">
+          <div class="cra-card h-100 d-flex flex-column justify-content-center align-items-start" style="border-left: 6px solid var(--cra-blue); padding: 20px 30px;">
             <p class="text-muted small fw-bold mb-1">จำนวนข่าวทั้งหมด</p>
             <div class="fw-bold text-dark d-flex align-items-baseline gap-2" style="font-size: 2.2rem; line-height: 1.1;">
               <span id="totalNews">-</span> <span style="font-size: 1rem; color: var(--cra-text-muted); font-weight: 400;">รายการ</span>
@@ -54,7 +54,7 @@
 
         <div class="col-xl-4 col-lg-12">
           <div class="cra-card h-100 d-flex flex-column justify-content-center bg-light border-0">
-            <span class="text-muted small fw-bold d-block mb-3"><i class="bi bi-funnel-fill" style="color: var(--cra-orange);"></i> กรองข้อมูลภาพรวม (Global Filter)</span>
+            <span class="text-muted small fw-bold d-block mb-3"><i class="bi bi-funnel-fill" style="color: #10b981;"></i> กรองข้อมูลภาพรวม (Global Filter)</span>
             <div class="d-flex gap-2">
               <select id="filterQuarter" class="form-select fw-bold border-0 shadow-sm" style="color: var(--cra-blue); background-color: #ffffff; cursor: pointer;">
                 <option value="">-- ทุกไตรมาส --</option>
@@ -70,14 +70,14 @@
       <div class="row mb-4 g-4">
         <div class="col-md-6">
           <div class="cra-card h-100 d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-center mb-4"><h6 class="fw-bold mb-0"><i class="bi bi-broadcast me-2" style="color: var(--cra-blue);"></i> สถานีโทรทัศน์</h6><span class="card-header-badge" id="badgeStation">รวมทั้งหมด</span></div>
-            <div class="chart-container"><canvas id="stationChart"></canvas><div class="chart-center-text"><div class="label">ทั้งหมด</div><div class="value" id="stationTotal">-</div></div></div>
-            <div class="chart-legend-container mt-3 flex-grow-1"><div id="stationLegend"></div></div>
+            <div class="d-flex justify-content-between align-items-center mb-4"><h6 class="fw-bold mb-0"><i class="bi bi-mic-fill me-2" style="color: var(--cra-blue);"></i> ช่องที่ออกอากาศ</h6><span class="card-header-badge" id="badgeChannel">รวมทั้งหมด</span></div>
+            <div class="chart-container"><canvas id="channelChart"></canvas><div class="chart-center-text"><div class="label">ทั้งหมด</div><div class="value" id="channelTotal">-</div></div></div>
+            <div class="chart-legend-container mt-3 flex-grow-1"><div id="channelLegend"></div></div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="cra-card h-100 d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-center mb-4"><h6 class="fw-bold mb-0"><i class="bi bi-collection-play-fill me-2" style="color: var(--cra-orange);"></i> รายการโทรทัศน์</h6><span class="card-header-badge" id="badgeProgram">รวมทั้งหมด</span></div>
+            <div class="d-flex justify-content-between align-items-center mb-4"><h6 class="fw-bold mb-0"><i class="bi bi-collection-play-fill me-2" style="color: var(--cra-orange);"></i> รายการวิทยุ</h6><span class="card-header-badge" id="badgeProgram">รวมทั้งหมด</span></div>
             <div class="chart-container"><canvas id="programChart"></canvas><div class="chart-center-text"><div class="label">ทั้งหมด</div><div class="value" id="programTotal">-</div></div></div>
             <div class="chart-legend-container mt-3 flex-grow-1"><div id="programLegend"></div></div>
           </div>
@@ -86,10 +86,10 @@
 
       <div class="cra-card">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
-          <h5 class="fw-bold mb-0" style="color: var(--cra-orange); white-space: nowrap;"><i class="bi bi-database-fill me-2" style="color: var(--cra-blue);"></i> ฐานข้อมูลโทรทัศน์</h5>
+          <h5 class="fw-bold mb-0" style="color: #10b981; white-space: nowrap;"><i class="bi bi-database-fill me-2" style="color: var(--cra-blue);"></i> ฐานข้อมูลวิทยุ</h5>
           
           <div class="d-flex flex-wrap gap-2 justify-content-md-end">
-            <select id="filterStation" class="filter-box"><option value="">- สถานีโทรทัศน์ -</option></select>
+            <select id="filterChannel" class="filter-box"><option value="">- ช่องที่ออกอากาศ -</option></select>
             <select id="filterProgram" class="filter-box"><option value="">- รายการ -</option></select>
             <div class="input-group" style="width: auto;">
               <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
@@ -103,12 +103,12 @@
             <thead>
               <tr>
                 <th style="width: 5%; text-align: center;">#</th>
-                <th style="width: 10%;">วันที่</th>
-                <th style="width: 25%;">หัวข้อรายการ</th>
-                <th style="width: 15%;">สถานี</th>
+                <th style="width: 10%;">วันที่ออกอากาศ</th>
+                <th style="width: 25%;">ประเด็นสุขภาพ/หัวข้อ</th> 
+                <th style="width: 15%;">ช่องที่ออกอากาศ</th>
                 <th style="width: 15%;">รายการ</th>
                 <th class="text-end pe-4" style="width: 12%;">PR Value</th>
-                <th style="width: 18%;">สัมภาษณ์</th>
+                <th style="width: 18%;">แพทย์ที่ให้สัมภาษณ์</th>
                 <th style="display:none;">Quarter</th>
                 <th style="display:none;">Month</th>
               </tr>
@@ -123,11 +123,11 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     
-  <script>
+    <script>
       // 🎯 ใส่ URL ของ Web App ที่ได้จาก Google Apps Script ตรงนี้
       const API_URL = "https://script.google.com/macros/s/AKfycbzU-Gg2wbHbbhWRJZR4WDbmbcQAaGgjekN-CzWIpBdZpjena09eM2h8fOdJwujwlGrKAw/exec";
       
-      const chartColors = ['#1d2b53', '#ea580c', '#eab308', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#64748b', '#0ea5e9'];
+      const chartColors = ['#1d2b53', '#ea580c', '#eab308', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#64748b'];
       let globalData = []; let chartInstances = {}; 
 
       function getStandardMonth(dateStr) {
@@ -150,7 +150,7 @@
         chartInstances[canvasId] = new Chart(document.getElementById(canvasId), { type: 'doughnut', data: { labels: labels, datasets: [{ data: dataCounts, backgroundColor: bgColors, borderWidth: 0, hoverOffset: 4 }] }, options: { cutout: '75%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
         let legendHtml = '<div>';
         dataObj.items.forEach((item, index) => {
-          legendHtml += `<div class="d-flex justify-content-between align-items-center legend-item"><div class="d-flex align-items-center text-truncate pe-3"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background-color:${bgColors[index]}; margin-right:10px;"></span><span class="text-truncate fw-medium" title="${item.name}">${item.name}</span></div><div class="d-flex align-items-center gap-3"><span class="fw-bold" style="color: var(--cra-blue);">${item.count}</span><span style="color: #94a3b8; font-size: 0.85rem; width: 60px; text-align: right;">${item.percent}%</span></div></div>`;
+          legendHtml += `<div class="d-flex justify-content-between align-items-center legend-item"><div class="d-flex align-items-center text-truncate pe-3"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background-color:${bgColors[index]}; margin-right:10px;"></span><span class="text-truncate fw-medium" title="${item.name}">${item.name}</span></div><div class="d-flex align-items-center gap-3"><span class="fw-bold" style="color: #3b82f6;">${item.count}</span><span style="color: #94a3b8; font-size: 0.85rem; width: 60px; text-align: right;">${item.percent}%</span></div></div>`;
         });
         $('#' + legendId).html(legendHtml + '</div>');
       }
@@ -163,24 +163,24 @@
             return true;
         });
 
-        let availableStations = new Set(); let availablePrograms = new Set();
-        timeFilteredData.forEach(item => { availableStations.add(item.station); availablePrograms.add(item.program); });
+        let availableChannels = new Set(); let availablePrograms = new Set();
+        timeFilteredData.forEach(item => { availableChannels.add(item.channel); availablePrograms.add(item.program); });
 
-        let currentStation = $('#filterStation').val(); let currentProgram = $('#filterProgram').val();
-        $('#filterStation').empty().append('<option value="">- สถานีโทรทัศน์ -</option>');
-        [...availableStations].sort().forEach(s => $('#filterStation').append(new Option(s, s)));
-        if(availableStations.has(currentStation)) $('#filterStation').val(currentStation);
+        let currentChannel = $('#filterChannel').val(); let currentProgram = $('#filterProgram').val();
+        $('#filterChannel').empty().append('<option value="">- ช่องที่ออกอากาศ -</option>');
+        [...availableChannels].sort().forEach(c => $('#filterChannel').append(new Option(c, c)));
+        if(availableChannels.has(currentChannel)) $('#filterChannel').val(currentChannel);
 
         $('#filterProgram').empty().append('<option value="">- รายการ -</option>');
         [...availablePrograms].sort().forEach(p => $('#filterProgram').append(new Option(p, p)));
         if(availablePrograms.has(currentProgram)) $('#filterProgram').val(currentProgram);
 
-        let stFilter = $('#filterStation').val(); let pFilter = $('#filterProgram').val(); let sFilter = $('#customSearch').val().toLowerCase();
+        let cFilter = $('#filterChannel').val(); let pFilter = $('#filterProgram').val(); let sFilter = $('#customSearch').val().toLowerCase();
 
         let finalFiltered = timeFilteredData.filter(item => {
-            if (stFilter && item.station !== stFilter) return false;
+            if (cFilter && item.channel !== cFilter) return false;
             if (pFilter && item.program !== pFilter) return false;
-            if (sFilter) { let textToSearch = `${item.date} ${item.title} ${item.station} ${item.program} ${item.interview}`.toLowerCase(); if (!textToSearch.includes(sFilter)) return false; }
+            if (sFilter) { let textToSearch = `${item.date} ${item.title} ${item.channel} ${item.program} ${item.doctor}`.toLowerCase(); if (!textToSearch.includes(sFilter)) return false; }
             return true;
         });
 
@@ -188,21 +188,21 @@
         $('#sumPR').text(sumPr.toLocaleString('th-TH', {maximumFractionDigits:0}));
         $('#totalNews').text(finalFiltered.length);
 
-        let statusText = (qFilter || mFilter || stFilter || pFilter) ? "เฉพาะข้อมูลที่กรอง" : "รวมทั้งหมด";
-        $('#badgeStation, #badgeProgram').text(statusText);
+        let statusText = (qFilter || mFilter || cFilter || pFilter) ? "เฉพาะข้อมูลที่กรอง" : "รวมทั้งหมด";
+        $('#badgeChannel, #badgeProgram').text(statusText);
 
-        renderDonutChart('stationChart', 'stationLegend', 'stationTotal', analyzeObj(finalFiltered, 'station'));
+        renderDonutChart('channelChart', 'channelLegend', 'channelTotal', analyzeObj(finalFiltered, 'channel'));
         renderDonutChart('programChart', 'programLegend', 'programTotal', analyzeObj(finalFiltered, 'program'));
 
         let table = $('#dataTable').DataTable();
         table.column(7).search(qFilter); table.column(8).search(mFilter);
-        table.column(3).search(stFilter); table.column(4).search(pFilter); 
+        table.column(3).search(cFilter); table.column(4).search(pFilter); 
         table.search(sFilter).draw();
       }
 
       $(document).ready(function() {
         // 🚀 ดึงข้อมูลผ่าน Fetch API
-        fetch(API_URL + "?action=getSheetData&sheetName=FreeTVProgram")
+        fetch(API_URL + "?action=getSheetData&sheetName=FreeRadioProgram")
           .then(res => res.json())
           .then(data => {
             if(data.error) throw new Error(data.error);
@@ -212,21 +212,21 @@
             data.forEach(function(row, index) {
               if(!row[1] && !row[2]) return;
 
-              let date = row[1];
-              let station = row[2] ? String(row[2]).trim() : "ไม่ระบุ";
-              let program = row[3] ? String(row[3]).trim() : "ไม่ระบุ";
-              let interview = row[4] ? String(row[4]).trim() : "";
-              let title = row[5] || "ไม่ระบุหัวข้อ";
+              let program = row[1] ? String(row[1]).trim() : "ไม่ระบุ";
+              let channel = row[2] ? String(row[2]).trim() : "ไม่ระบุ";
+              let date = row[3];
+              let title = row[4] || "ไม่ระบุหัวข้อ";
+              let doctor = row[5] ? String(row[5]).trim() : "";
               let projectUrl = row[6] || row[10]; 
               let prVal = parseFloat(String(row[7]).replace(/,/g, '')) || 0;
               let quarterVal = row[8] ? String(row[8]).trim() : ""; 
-              let stdMonth = getStandardMonth(date);
+              let stdMonth = getStandardMonth(date); 
 
-              globalData.push({ date: date, station: station, program: program, interview: interview, title: title, prValue: prVal, quarter: quarterVal, month: stdMonth });
+              globalData.push({ date: date, channel: channel, program: program, doctor: doctor, title: title, prValue: prVal, quarter: quarterVal, month: stdMonth });
 
               let titleHtml = title;
               if(projectUrl && String(projectUrl).includes('http')) {
-                 titleHtml = `<div class="mb-2 text-wrap" style="line-height: 1.4;">${title}</div><a href="${projectUrl}" target="_blank" class="badge bg-primary text-decoration-none shadow-sm py-2 px-3"><i class="bi bi-play-circle-fill"></i> รับชมรายการ</a>`;
+                 titleHtml = `<div class="mb-2 text-wrap" style="line-height: 1.4;">${title}</div><a href="${projectUrl}" target="_blank" class="badge bg-success text-decoration-none shadow-sm py-2 px-3"><i class="bi bi-headphones"></i> ฟังรายการ</a>`;
               }
 
               if(quarterVal) quartersForFilter.add(quarterVal);
@@ -236,10 +236,10 @@
                 <td class="text-center text-muted">${row[0] || (index + 1)}</td>
                 <td>${date}</td>
                 <td class="fw-medium text-wrap">${titleHtml}</td>
-                <td><span class="badge-category">${station}</span></td>
+                <td><span class="badge-category">${channel}</span></td>
                 <td>${program}</td>
-                <td class="fw-bold text-end pe-4" style="color: var(--cra-orange); font-size: 1.05rem;">${prVal.toLocaleString('th-TH', {maximumFractionDigits:0})} <span style="font-size: 0.75rem; color: #94a3b8; font-weight: normal;">บาท</span></td>
-                <td>${interview}</td>
+                <td class="fw-bold text-end pe-4" style="color: #10b981; font-size: 1.05rem;">${prVal.toLocaleString('th-TH', {maximumFractionDigits:0})} <span style="font-size: 0.75rem; color: #94a3b8; font-weight: normal;">บาท</span></td>
+                <td>${doctor}</td>
                 <td style="display:none;">${quarterVal}</td><td style="display:none;">${stdMonth}</td>
               </tr>`;
             });
@@ -250,7 +250,7 @@
             $('#dataTable tbody').html(tbody);
             $('#dataTable').DataTable({ "dom": 't<"d-flex justify-content-between mt-4"ip>', "pageLength": 10, "language": { "emptyTable": "ไม่พบข้อมูล", "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ", "paginate": { "next": "ถัดไป", "previous": "ก่อนหน้า" } } });
             
-            $('#filterQuarter, #filterMonth, #filterStation, #filterProgram').on('change', function() { updateDashboardWidgets(); }); 
+            $('#filterQuarter, #filterMonth, #filterChannel, #filterProgram').on('change', function() { updateDashboardWidgets(); }); 
             $('#customSearch').on('keyup', function() { updateDashboardWidgets(); });
 
             updateDashboardWidgets();
