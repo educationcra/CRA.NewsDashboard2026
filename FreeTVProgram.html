@@ -202,7 +202,7 @@
 
       $(document).ready(function() {
         // 🚀 ดึงข้อมูลผ่าน Fetch API
-        fetch(API_URL + "?action=getSheetData&sheetName=FreeTVProgram")
+        fetch(API_URL + "?action=getSheetData&sheetName=FreeTVProgram", { redirect: "follow" })
           .then(res => res.json())
           .then(data => {
             if(data.error) throw new Error(data.error);
