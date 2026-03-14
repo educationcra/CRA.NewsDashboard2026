@@ -214,7 +214,7 @@
 
       $(document).ready(function() {
     // 🎯 เปลี่ยนจาก google.script.run เป็น fetch API
-    fetch(API_URL + "?action=getDashboardSummary")
+    fetch(API_URL + "?action=getDashboardSummary", { redirect: "follow" })
       .then(response => response.json())
       .then(data => {
         if(data.error) throw new Error(data.error);
