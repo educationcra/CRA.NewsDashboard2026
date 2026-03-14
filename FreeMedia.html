@@ -300,7 +300,7 @@
 
         // 🎯 จุดที่เปลี่ยน: ใช้ fetch API ดึงข้อมูลแทน google.script.run
         // สังเกตการต่อ URL ด้วย ?action=getSheetData&sheetName=FreeMedia
-        fetch(API_URL + "?action=getSheetData&sheetName=FreeMedia")
+        fetch(API_URL + "?action=getSheetData&sheetName=FreeMedia", { redirect: "follow" })
           .then(response => response.json())
           .then(data => {
             // เช็คว่ามี Error จากฝั่ง Apps Script หรือไม่
