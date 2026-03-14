@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .legend-item { font-size: 0.9rem; padding: 10px 0; border-bottom: 1px dashed #e2e8f0; transition: background-color 0.2s; }
+      .legend-item:last-child { border-bottom: none; }
+      .legend-item:hover { background-color: #f8fafc; }
+      .legend-color-dot { display: inline-block; min-width: 14px; height: 14px; border-radius: 50%; margin-right: 12px; }
+      .legend-text { flex: 1; min-width: 0; color: var(--cra-text-main); font-weight: 500;}
+      .legend-count { width: 50px; text-align: right; font-weight: 700; color: var(--cra-blue); }
+      .legend-percent { width: 90px; text-align: right; color: var(--cra-text-muted); font-size: 0.85rem;}
+    </style>
+  </head>
+  <body>
+    <div id="loader-wrapper">
+      <div class="loader-logo">CRA News Dashboard <br>ข่าวโทรทัศน์</div>
+      <div class="progress-container"><div class="progress-bar-fill" id="progressBar"></div></div>
+      <div class="progress-text">กำลังวิเคราะห์ข้อมูล... <span id="progressText" style="color: var(--cra-blue); font-weight: 700;">0</span>%</div>
+    </div>
+
+    <div class="container-fluid py-4 px-md-5">
+      <div class="top-nav">
+        <a href="index.html" class="btn-back"><i class="bi bi-arrow-left"></i> กลับหน้าหลัก</a>
+        <span class="nav-divider">↹</span>
+        <span class="text-muted" style="font-size: 0.9rem;">Dashboard ข่าวโทรทัศน์</span>
+      </div>
+
+      <div class="row mb-4 g-4 align-items-stretch">
+        <div class="col-xl-5 col-lg-6">
+          <div class="cra-card h-100 d-flex flex-column justify-content-center align-items-start" style="border-left: 6px solid var(--cra-orange); padding: 20px 30px;">
+            <div class="d-flex align-items-center">
+              <div class="menu-icon-box mb-0 me-3" style="width: 56px; height: 56px; font-size: 24px; background: rgba(234, 88, 12, 0.1); color: var(--cra-orange); border-radius: 14px; display: flex; justify-content: center; align-items: center;">
+                <i class="bi bi-tv-fill"></i>
+              </div>
+              <div>
+                <p class="text-muted small fw-bold mb-1">ยอด PR Value รวม (บาท)</p>
+                <div class="fw-bold" style="font-size: 2.2rem; color: var(--cra-orange); line-height: 1.1;" id="sumPR">กำลังคำนวณ...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-6">
+          <div class="cra-card h-100 d-flex flex-column justify-content-center align-items-start" style="border-left: 6px solid #10b981; padding: 20px 30px;">
+            <p class="text-muted small fw-bold mb-1">จำนวนข่าวทั้งหมด</p>
+            <div class="fw-bold text-dark d-flex align-items-baseline gap-2" style="font-size: 2.2rem; line-height: 1.1;">
+              <span id="totalNews">-</span> <span style="font-size: 1rem; color: var(--cra-text-muted); font-weight: 400;">รายการ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-12">
+          <div class="cra-card h-100 d-flex flex-column justify-content-center bg-light border-0">
+            <span class="text-muted small fw-bold d-block mb-3"><i class="bi bi-funnel-fill" style="color: var(--cra-orange);"></i> กรองข้อมูลภาพรวม (Global Filter)</span>
+            <div class="d-flex gap-2">
+              <select id="filterQuarter" class="form-select fw-bold border-0 shadow-sm" style="color: var(--cra-blue); background-color: #ffffff; cursor: pointer;">
+                <option value="">-- ทุกไตรมาส --</option>
+              </select>
+              <select id="filterMonth" class="form-select fw-bold border-0 shadow-sm" style="color: var(--cra-orange); background-color: #ffffff; cursor: pointer;">
+                <option value="">-- ทุกเดือน --</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4 g-4">
+        <div class="col-md-6">
+          <div class="cra-card h-100 d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-center mb-4"><h6 class="fw-bold mb-0"><i class="bi bi-broadcast me-2" style="color: var(--cra-blue);"></i> สถานีโทรทัศน์</h6><span class="card-header-badge" id="badgeStation">รวมทั้งหมด</span></div>
+            <div class="chart-container"><canvas id="stationChart"></canvas><div class="chart-center-text"><div class="label">ทั้งหมด</div><div class="value" id="stationTotal">-</div></div></div>
+            <div class="chart-legend-container mt-3 flex-grow-1"><div id="stationLegend"></div></div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cra-card h-100 d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-center mb-4"><h6 class="fw-bold mb-0"><i class="bi bi-collection-play-fill me-2" style="color: var(--cra-orange);"></i> รายการโทรทัศน์</h6><span class="card-header-badge" id="badgeProgram">รวมทั้งหมด</span></div>
+            <div class="chart-container"><canvas id="programChart"></canvas><div class="chart-center-text"><div class="label">ทั้งหมด</div><div class="value" id="programTotal">-</div></div></div>
+            <div class="chart-legend-container mt-3 flex-grow-1"><div id="programLegend"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cra-card">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+          <h5 class="fw-bold mb-0" style="color: var(--cra-orange); white-space: nowrap;"><i class="bi bi-database-fill me-2" style="color: var(--cra-blue);"></i> ฐานข้อมูลโทรทัศน์</h5>
+          
+          <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+            <select id="filterStation" class="filter-box"><option value="">- สถานีโทรทัศน์ -</option></select>
+            <select id="filterProgram" class="filter-box"><option value="">- รายการ -</option></select>
+            <div class="input-group" style="width: auto;">
+              <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+              <input type="text" id="customSearch" class="form-control filter-box border-start-0 ps-0" placeholder="ค้นหาทั่วไป...">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table id="dataTable" class="cra-table">
+            <thead>
+              <tr>
+                <th style="width: 5%; text-align: center;">#</th>
+                <th style="width: 10%;">วันที่</th>
+                <th style="width: 25%;">หัวข้อรายการ</th>
+                <th style="width: 15%;">สถานี</th>
+                <th style="width: 15%;">รายการ</th>
+                <th class="text-end pe-4" style="width: 12%;">PR Value</th>
+                <th style="width: 18%;">สัมภาษณ์</th>
+                <th style="display:none;">Quarter</th>
+                <th style="display:none;">Month</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    
+  <script>
+      // 🎯 ใส่ URL ของ Web App ที่ได้จาก Google Apps Script ตรงนี้
+      const API_URL = "https://script.google.com/macros/s/AKfycbzU-Gg2wbHbbhWRJZR4WDbmbcQAaGgjekN-CzWIpBdZpjena09eM2h8fOdJwujwlGrKAw/exec";
+      
+      const chartColors = ['#1d2b53', '#ea580c', '#eab308', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#64748b', '#0ea5e9'];
+      let globalData = []; let chartInstances = {}; 
+
+      function getStandardMonth(dateStr) {
+        if(!dateStr) return ""; const str = String(dateStr).toLowerCase();
+        if(str.includes('มกราคม')||str.includes('ม.ค.')||str.includes('jan')) return "01-มกราคม"; if(str.includes('กุมภาพันธ์')||str.includes('ก.พ.')||str.includes('feb')) return "02-กุมภาพันธ์"; if(str.includes('มีนาคม')||str.includes('มี.ค.')||str.includes('mar')) return "03-มีนาคม"; if(str.includes('เมษายน')||str.includes('เม.ย.')||str.includes('apr')) return "04-เมษายน"; if(str.includes('พฤษภาคม')||str.includes('พ.ค.')||str.includes('may')) return "05-พฤษภาคม"; if(str.includes('มิถุนายน')||str.includes('มิ.ย.')||str.includes('jun')) return "06-มิถุนายน"; if(str.includes('กรกฎาคม')||str.includes('ก.ค.')||str.includes('jul')) return "07-กรกฎาคม"; if(str.includes('สิงหาคม')||str.includes('ส.ค.')||str.includes('aug')) return "08-สิงหาคม"; if(str.includes('กันยายน')||str.includes('ก.ย.')||str.includes('sep')) return "09-กันยายน"; if(str.includes('ตุลาคม')||str.includes('ต.ค.')||str.includes('oct')) return "10-ตุลาคม"; if(str.includes('พฤศจิกายน')||str.includes('พ.ย.')||str.includes('nov')) return "11-พฤศจิกายน"; if(str.includes('ธันวาคม')||str.includes('ธ.ค.')||str.includes('dec')) return "12-ธันวาคม"; return "";
+      }
+
+      function analyzeObj(dataArray, key) {
+        let counts = {}; let total = 0;
+        dataArray.forEach(item => { let val = item[key] ? item[key] : "ไม่ระบุ"; if(val === "") val = "ไม่ระบุ"; counts[val] = (counts[val] || 0) + 1; total++; });
+        let sorted = Object.keys(counts).map(k => ({ name: k, count: counts[k], percent: total > 0 ? ((counts[k]/total)*100).toFixed(2) : "0.00" })).sort((a,b) => b.count - a.count);
+        return { total: total, items: sorted };
+      }
+
+      function renderDonutChart(canvasId, legendId, totalId, dataObj) {
+        if (chartInstances[canvasId]) { chartInstances[canvasId].destroy(); }
+        $('#' + totalId).text(dataObj.total);
+        let labels = dataObj.items.map(i => i.name); let dataCounts = dataObj.items.map(i => i.count); let bgColors = labels.map((_, i) => chartColors[i % chartColors.length]);
+        if(dataObj.total === 0) { $('#' + legendId).html('<div class="text-center py-4 text-muted">ไม่มีข้อมูล</div>'); return; }
+        chartInstances[canvasId] = new Chart(document.getElementById(canvasId), { type: 'doughnut', data: { labels: labels, datasets: [{ data: dataCounts, backgroundColor: bgColors, borderWidth: 0, hoverOffset: 4 }] }, options: { cutout: '75%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+        let legendHtml = '<div>';
+        dataObj.items.forEach((item, index) => {
+          legendHtml += `<div class="d-flex justify-content-between align-items-center legend-item"><div class="d-flex align-items-center text-truncate pe-3"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background-color:${bgColors[index]}; margin-right:10px;"></span><span class="text-truncate fw-medium" title="${item.name}">${item.name}</span></div><div class="d-flex align-items-center gap-3"><span class="fw-bold" style="color: var(--cra-blue);">${item.count}</span><span style="color: #94a3b8; font-size: 0.85rem; width: 60px; text-align: right;">${item.percent}%</span></div></div>`;
+        });
+        $('#' + legendId).html(legendHtml + '</div>');
+      }
+
+      function updateDashboardWidgets() {
+        let qFilter = $('#filterQuarter').val(); let mFilter = $('#filterMonth').val();
+        let timeFilteredData = globalData.filter(item => {
+            if (qFilter && item.quarter !== qFilter) return false;
+            if (mFilter && item.month !== mFilter) return false;
+            return true;
+        });
+
+        let availableStations = new Set(); let availablePrograms = new Set();
+        timeFilteredData.forEach(item => { availableStations.add(item.station); availablePrograms.add(item.program); });
+
+        let currentStation = $('#filterStation').val(); let currentProgram = $('#filterProgram').val();
+        $('#filterStation').empty().append('<option value="">- สถานีโทรทัศน์ -</option>');
+        [...availableStations].sort().forEach(s => $('#filterStation').append(new Option(s, s)));
+        if(availableStations.has(currentStation)) $('#filterStation').val(currentStation);
+
+        $('#filterProgram').empty().append('<option value="">- รายการ -</option>');
+        [...availablePrograms].sort().forEach(p => $('#filterProgram').append(new Option(p, p)));
+        if(availablePrograms.has(currentProgram)) $('#filterProgram').val(currentProgram);
+
+        let stFilter = $('#filterStation').val(); let pFilter = $('#filterProgram').val(); let sFilter = $('#customSearch').val().toLowerCase();
+
+        let finalFiltered = timeFilteredData.filter(item => {
+            if (stFilter && item.station !== stFilter) return false;
+            if (pFilter && item.program !== pFilter) return false;
+            if (sFilter) { let textToSearch = `${item.date} ${item.title} ${item.station} ${item.program} ${item.interview}`.toLowerCase(); if (!textToSearch.includes(sFilter)) return false; }
+            return true;
+        });
+
+        let sumPr = finalFiltered.reduce((sum, item) => sum + item.prValue, 0);
+        $('#sumPR').text(sumPr.toLocaleString('th-TH', {maximumFractionDigits:0}));
+        $('#totalNews').text(finalFiltered.length);
+
+        let statusText = (qFilter || mFilter || stFilter || pFilter) ? "เฉพาะข้อมูลที่กรอง" : "รวมทั้งหมด";
+        $('#badgeStation, #badgeProgram').text(statusText);
+
+        renderDonutChart('stationChart', 'stationLegend', 'stationTotal', analyzeObj(finalFiltered, 'station'));
+        renderDonutChart('programChart', 'programLegend', 'programTotal', analyzeObj(finalFiltered, 'program'));
+
+        let table = $('#dataTable').DataTable();
+        table.column(7).search(qFilter); table.column(8).search(mFilter);
+        table.column(3).search(stFilter); table.column(4).search(pFilter); 
+        table.search(sFilter).draw();
+      }
+
+      $(document).ready(function() {
+        // 🚀 ดึงข้อมูลผ่าน Fetch API
+        fetch(API_URL + "?action=getSheetData&sheetName=FreeTVProgram")
+          .then(res => res.json())
+          .then(data => {
+            if(data.error) throw new Error(data.error);
+
+            let tbody = ''; let quartersForFilter = new Set(); let monthsForFilter = new Set();
+            
+            data.forEach(function(row, index) {
+              if(!row[1] && !row[2]) return;
+
+              let date = row[1];
+              let station = row[2] ? String(row[2]).trim() : "ไม่ระบุ";
+              let program = row[3] ? String(row[3]).trim() : "ไม่ระบุ";
+              let interview = row[4] ? String(row[4]).trim() : "";
+              let title = row[5] || "ไม่ระบุหัวข้อ";
+              let projectUrl = row[6] || row[10]; 
+              let prVal = parseFloat(String(row[7]).replace(/,/g, '')) || 0;
+              let quarterVal = row[8] ? String(row[8]).trim() : ""; 
+              let stdMonth = getStandardMonth(date);
+
+              globalData.push({ date: date, station: station, program: program, interview: interview, title: title, prValue: prVal, quarter: quarterVal, month: stdMonth });
+
+              let titleHtml = title;
+              if(projectUrl && String(projectUrl).includes('http')) {
+                 titleHtml = `<div class="mb-2 text-wrap" style="line-height: 1.4;">${title}</div><a href="${projectUrl}" target="_blank" class="badge bg-primary text-decoration-none shadow-sm py-2 px-3"><i class="bi bi-play-circle-fill"></i> รับชมรายการ</a>`;
+              }
+
+              if(quarterVal) quartersForFilter.add(quarterVal);
+              if(stdMonth) monthsForFilter.add(stdMonth);
+
+              tbody += `<tr>
+                <td class="text-center text-muted">${row[0] || (index + 1)}</td>
+                <td>${date}</td>
+                <td class="fw-medium text-wrap">${titleHtml}</td>
+                <td><span class="badge-category">${station}</span></td>
+                <td>${program}</td>
+                <td class="fw-bold text-end pe-4" style="color: var(--cra-orange); font-size: 1.05rem;">${prVal.toLocaleString('th-TH', {maximumFractionDigits:0})} <span style="font-size: 0.75rem; color: #94a3b8; font-weight: normal;">บาท</span></td>
+                <td>${interview}</td>
+                <td style="display:none;">${quarterVal}</td><td style="display:none;">${stdMonth}</td>
+              </tr>`;
+            });
+
+            [...quartersForFilter].sort().forEach(q => $('#filterQuarter').append(new Option("ไตรมาส: " + q, q)));
+            [...monthsForFilter].sort().forEach(m => { let displayMonth = m.substring(3); $('#filterMonth').append(new Option("เดือน: " + displayMonth, m)); });
+            
+            $('#dataTable tbody').html(tbody);
+            $('#dataTable').DataTable({ "dom": 't<"d-flex justify-content-between mt-4"ip>', "pageLength": 10, "language": { "emptyTable": "ไม่พบข้อมูล", "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ", "paginate": { "next": "ถัดไป", "previous": "ก่อนหน้า" } } });
+            
+            $('#filterQuarter, #filterMonth, #filterStation, #filterProgram').on('change', function() { updateDashboardWidgets(); }); 
+            $('#customSearch').on('keyup', function() { updateDashboardWidgets(); });
+
+            updateDashboardWidgets();
+            
+            // ปิด Loading Screen
+            $('#loader-wrapper').addClass('loader-hidden');
+          })
+          .catch(error => {
+            console.error("Error:", error);
+            alert("เกิดข้อผิดพลาด: " + error.message);
+            $('#loader-wrapper').addClass('loader-hidden');
+          });
+      });
+    </script>
+  </body>
+</html>
