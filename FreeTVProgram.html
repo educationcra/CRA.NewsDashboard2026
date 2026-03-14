@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRA News Dashboard 2026</title>
+    <title>CRA News Dashboard 2026 - ข่าวโทรทัศน์</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,8 +18,9 @@
     <style>
       :root {
         --cra-blue: #1d2b53;
-        --cra-orange: #ea580c;
-        --cra-bg: #f8faff; /* สีพื้นหลังสว่างคลีนๆ เหมือนหน้า Index */
+        --cra-orange: #ea580c; /* 🎯 สีหลักของหน้า TV */
+        --cra-green: #10b981;
+        --cra-bg: #f8faff; 
         --cra-card-bg: #ffffff;
         --cra-text-main: #334155;
         --cra-text-muted: #64748b;
@@ -27,9 +28,12 @@
 
       body { 
         background-color: var(--cra-bg); 
-        /* ลายตาข่ายจางๆ แบบ Dashboard ยุคใหม่ */
-        background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-        background-size: 24px 24px;
+        /* 🎯 พื้นหลัง Pastel Mesh Gradient เหมือนหน้า Index */
+        background-image: 
+          radial-gradient(at 10% 10%, rgba(224, 231, 255, 0.9) 0px, transparent 50%),
+          radial-gradient(at 90% 10%, rgba(250, 232, 255, 0.9) 0px, transparent 50%),
+          radial-gradient(at 50% 90%, rgba(224, 242, 254, 0.9) 0px, transparent 50%);
+        background-attachment: fixed;
         font-family: 'Noto Sans Thai', sans-serif !important; 
         color: var(--cra-text-main);
         padding-bottom: 50px;
@@ -38,10 +42,11 @@
 
       .top-nav { margin-bottom: 2rem; display: flex; align-items: center; gap: 15px; margin-top: 20px;}
       .btn-back { background: #ffffff; color: #1e293b; padding: 8px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #e2e8f0; }
-      .btn-back:hover { background: #f1f5f9; color: var(--cra-blue); transform: translateY(-2px); }
+      /* 🎯 Hover เป็นสีส้มตามธีมทีวี */
+      .btn-back:hover { background: #f1f5f9; color: var(--cra-orange); transform: translateY(-2px); }
       .nav-divider { margin: 0 10px; color: #cbd5e1; }
 
-      /* 🌟 การ์ดกระจกฝ้า (Glassmorphism) เหมือนหน้า Index */
+      /* การ์ดกระจกฝ้า (Glassmorphism) */
       .cra-card { 
         background: rgba(255, 255, 255, 0.85); 
         backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -54,9 +59,10 @@
 
       /* ตัวกรอง (Filter) */
       .filter-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 16px; font-size: 0.9rem; color: var(--cra-text-main); outline: none; min-width: 180px; transition: 0.2s;}
-      .filter-box:focus { border-color: var(--cra-blue); box-shadow: 0 0 0 3px rgba(29, 43, 83, 0.1); }
+      .filter-box:focus { border-color: var(--cra-orange); box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1); }
       
-      .badge-category { background: rgba(29, 43, 83, 0.1); color: var(--cra-blue); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+      /* 🎯 ป้ายหมวดหมู่เป็นสีส้ม */
+      .badge-category { background: rgba(234, 88, 12, 0.1); color: var(--cra-orange); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
 
       /* Chart & Legend Styles */
       .chart-container { position: relative; height: 250px; width: 100%; margin-bottom: 20px;}
@@ -74,7 +80,7 @@
       .legend-item:hover { background-color: #f8fafc; }
       .legend-color-dot { display: inline-block; min-width: 14px; height: 14px; border-radius: 50%; margin-right: 12px; }
       .legend-text { flex: 1; min-width: 0; color: var(--cra-text-main); font-weight: 500;}
-      .legend-count { width: 50px; text-align: right; font-weight: 700; color: var(--cra-blue); }
+      .legend-count { width: 50px; text-align: right; font-weight: 700; color: var(--cra-orange); }
       .legend-percent { width: 90px; text-align: right; color: var(--cra-text-muted); font-size: 0.85rem;}
 
       /* Ranking List */
@@ -106,13 +112,14 @@
       .dataTables_filter, .dataTables_length { display: none !important; }
       .dataTables_info { color: var(--cra-text-muted); font-size: 0.85rem; padding-top: 20px; }
       .pagination { margin-top: 20px; }
-      .page-item.active .page-link { background-color: var(--cra-blue); border-color: var(--cra-blue); }
+      /* 🎯 ปรับ Pagination เป็นสีส้ม */
+      .page-item.active .page-link { background-color: var(--cra-orange); border-color: var(--cra-orange); }
 
       /* Loading Screen */
       #loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s; }
-      .loader-logo { font-size: 1.5rem; font-weight: 800; color: var(--cra-blue); margin-bottom: 20px; text-align: center;}
+      .loader-logo { font-size: 1.5rem; font-weight: 800; color: var(--cra-orange); margin-bottom: 20px; text-align: center;}
       .progress-container { width: 250px; height: 8px; background-color: #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 15px;}
-      .progress-bar-fill { height: 100%; background-color: var(--cra-blue); width: 0%; transition: width 0.3s; }
+      .progress-bar-fill { height: 100%; background-color: var(--cra-orange); width: 0%; transition: width 0.3s; }
       .loader-hidden { opacity: 0; pointer-events: none; }
     </style>
   </head>
@@ -120,7 +127,7 @@
     <div id="loader-wrapper">
       <div class="loader-logo">CRA News Dashboard 2026<br>ข่าวโทรทัศน์</div>
       <div class="progress-container"><div class="progress-bar-fill" id="progressBar"></div></div>
-      <div class="progress-text">กำลังวิเคราะห์ข้อมูล... <span id="progressText" style="color: var(--cra-blue); font-weight: 700;">0</span>%</div>
+      <div class="progress-text">กำลังดึงข้อมูล... <span id="progressText" style="color: var(--cra-orange); font-weight: 700;">0</span>%</div>
     </div>
 
     <div class="container-fluid py-4 px-md-5">
@@ -155,7 +162,7 @@
         </div>
 
         <div class="col-xl-4 col-lg-12">
-          <div class="cra-card h-100 d-flex flex-column justify-content-center bg-light border-0">
+          <div class="cra-card h-100 d-flex flex-column justify-content-center bg-light border-0" style="padding: 20px 30px;">
             <span class="text-muted small fw-bold d-block mb-3"><i class="bi bi-funnel-fill" style="color: var(--cra-orange);"></i> กรองข้อมูลภาพรวม (Global Filter)</span>
             <div class="d-flex gap-2">
               <select id="filterQuarter" class="form-select fw-bold border-0 shadow-sm" style="color: var(--cra-blue); background-color: #ffffff; cursor: pointer;">
@@ -194,7 +201,7 @@
             <select id="filterStation" class="filter-box"><option value="">- สถานีโทรทัศน์ -</option></select>
             <select id="filterProgram" class="filter-box"><option value="">- รายการ -</option></select>
             <div class="input-group" style="width: auto;">
-              <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+              <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
               <input type="text" id="customSearch" class="form-control filter-box border-start-0 ps-0" placeholder="ค้นหาทั่วไป...">
             </div>
           </div>
@@ -226,7 +233,6 @@
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     
   <script>
-      // 🎯 ใส่ URL ของ Web App ที่ได้จาก Google Apps Script ตรงนี้
       const API_URL = "https://script.google.com/macros/s/AKfycbzU-Gg2wbHbbhWRJZR4WDbmbcQAaGgjekN-CzWIpBdZpjena09eM2h8fOdJwujwlGrKAw/exec";
       
       const chartColors = ['#1d2b53', '#ea580c', '#eab308', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#64748b', '#0ea5e9'];
@@ -252,7 +258,8 @@
         chartInstances[canvasId] = new Chart(document.getElementById(canvasId), { type: 'doughnut', data: { labels: labels, datasets: [{ data: dataCounts, backgroundColor: bgColors, borderWidth: 0, hoverOffset: 4 }] }, options: { cutout: '75%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
         let legendHtml = '<div>';
         dataObj.items.forEach((item, index) => {
-          legendHtml += `<div class="d-flex justify-content-between align-items-center legend-item"><div class="d-flex align-items-center text-truncate pe-3"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background-color:${bgColors[index]}; margin-right:10px;"></span><span class="text-truncate fw-medium" title="${item.name}">${item.name}</span></div><div class="d-flex align-items-center gap-3"><span class="fw-bold" style="color: var(--cra-blue);">${item.count}</span><span style="color: #94a3b8; font-size: 0.85rem; width: 60px; text-align: right;">${item.percent}%</span></div></div>`;
+          // 🎯 สีตัวเลขและเปอร์เซ็นต์เป็นสีส้มสำหรับ TV
+          legendHtml += `<div class="d-flex justify-content-between align-items-center legend-item"><div class="d-flex align-items-center text-truncate pe-3"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background-color:${bgColors[index]}; margin-right:10px;"></span><span class="text-truncate fw-medium" title="${item.name}">${item.name}</span></div><div class="d-flex align-items-center gap-3"><span class="fw-bold" style="color: var(--cra-orange);">${item.count}</span><span style="color: #94a3b8; font-size: 0.85rem; width: 60px; text-align: right;">${item.percent}%</span></div></div>`;
         });
         $('#' + legendId).html(legendHtml + '</div>');
       }
@@ -303,7 +310,22 @@
       }
 
       $(document).ready(function() {
-        // 🚀 ดึงข้อมูลผ่าน Fetch API
+        let progress = 0;
+        let progressInterval = setInterval(function() {
+          if (progress < 90) {
+            progress += Math.floor(Math.random() * 10) + 5;
+            if (progress > 90) progress = 90;
+            $('#progressBar').css('width', progress + '%'); $('#progressText').text(progress);
+          }
+        }, 300); 
+
+        function finishLoading() {
+          clearInterval(progressInterval);
+          $('#progressBar').css('width', '100%'); $('#progressText').text('100');
+          setTimeout(function() { $('#loader-wrapper').addClass('loader-hidden'); }, 500); 
+        }
+
+        // 🚀 ดึงข้อมูลผ่าน Fetch API แบบมี redirect: follow
         fetch(API_URL + "?action=getSheetData&sheetName=FreeTVProgram", { redirect: "follow" })
           .then(res => res.json())
           .then(data => {
@@ -328,16 +350,17 @@
 
               let titleHtml = title;
               if(projectUrl && String(projectUrl).includes('http')) {
-                 titleHtml = `<div class="mb-2 text-wrap" style="line-height: 1.4;">${title}</div><a href="${projectUrl}" target="_blank" class="badge bg-primary text-decoration-none shadow-sm py-2 px-3"><i class="bi bi-play-circle-fill"></i> รับชมรายการ</a>`;
+                 titleHtml = `<div class="mb-2 text-wrap" style="line-height: 1.4;">${title}</div><a href="${projectUrl}" target="_blank" class="badge bg-primary text-decoration-none shadow-sm py-2 px-3" style="background-color: var(--cra-orange) !important;"><i class="bi bi-play-circle-fill"></i> รับชมรายการ</a>`;
               }
 
               if(quarterVal) quartersForFilter.add(quarterVal);
               if(stdMonth) monthsForFilter.add(stdMonth);
 
+              // 🎯 ใส่ badge-category ให้แสดงสีส้มอย่างถูกต้อง
               tbody += `<tr>
                 <td class="text-center text-muted">${row[0] || (index + 1)}</td>
                 <td>${date}</td>
-                <td class="fw-medium text-wrap">${titleHtml}</td>
+                <td class="fw-medium text-wrap" style="max-width: 250px;">${titleHtml}</td>
                 <td><span class="badge-category">${station}</span></td>
                 <td>${program}</td>
                 <td class="fw-bold text-end pe-4" style="color: var(--cra-orange); font-size: 1.05rem;">${prVal.toLocaleString('th-TH', {maximumFractionDigits:0})} <span style="font-size: 0.75rem; color: #94a3b8; font-weight: normal;">บาท</span></td>
@@ -350,20 +373,19 @@
             [...monthsForFilter].sort().forEach(m => { let displayMonth = m.substring(3); $('#filterMonth').append(new Option("เดือน: " + displayMonth, m)); });
             
             $('#dataTable tbody').html(tbody);
-            $('#dataTable').DataTable({ "dom": 't<"d-flex justify-content-between mt-4"ip>', "pageLength": 10, "language": { "emptyTable": "ไม่พบข้อมูล", "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ", "paginate": { "next": "ถัดไป", "previous": "ก่อนหน้า" } } });
+            $('#dataTable').DataTable({ "dom": 't<"d-flex flex-column flex-md-row justify-content-between align-items-center mt-4"ip>', "pageLength": 10, "language": { "emptyTable": "ไม่พบข้อมูล", "info": "แสดงรายการ _START_ ถึง _END_ จากทั้งหมด _TOTAL_ รายการ", "paginate": { "next": "ถัดไป", "previous": "ก่อนหน้า" } } });
             
             $('#filterQuarter, #filterMonth, #filterStation, #filterProgram').on('change', function() { updateDashboardWidgets(); }); 
             $('#customSearch').on('keyup', function() { updateDashboardWidgets(); });
 
             updateDashboardWidgets();
             
-            // ปิด Loading Screen
-            $('#loader-wrapper').addClass('loader-hidden');
+            finishLoading();
           })
           .catch(error => {
             console.error("Error:", error);
-            alert("เกิดข้อผิดพลาด: " + error.message);
-            $('#loader-wrapper').addClass('loader-hidden');
+            alert("เกิดข้อผิดพลาดในการดึงข้อมูล: " + error.message);
+            finishLoading();
           });
       });
     </script>
