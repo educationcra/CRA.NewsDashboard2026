@@ -53,9 +53,19 @@
       .cra-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(47, 60, 90, 0.08); }
 
       /* ตัวกรอง (Filter) */
-      .filter-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 16px; font-size: 0.9rem; color: var(--cra-text-main); outline: none; min-width: 180px; transition: 0.2s;}
+      /* ตัวกรอง (Filter) */
+      .filter-box { 
+        background: #f8fafc; 
+        border: 1px solid #e2e8f0; 
+        border-radius: 12px; 
+        padding: 10px 16px; 
+        font-size: 0.9rem; 
+        color: var(--cra-text-main); 
+        outline: none; 
+        transition: 0.2s;
+        /* ลบคำสั่งตัดคำออกทั้งหมด เพื่อให้ Layout ใหม่จัดการพื้นที่เอง */
+      }
       .filter-box:focus { border-color: var(--cra-blue); box-shadow: 0 0 0 3px rgba(29, 43, 83, 0.1); }
-      
       .badge-category { background: rgba(29, 43, 83, 0.1); color: var(--cra-blue); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
 
       /* Chart & Legend Styles */
