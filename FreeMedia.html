@@ -19,7 +19,7 @@
       :root {
         --cra-blue: #1d2b53;
         --cra-orange: #ea580c;
-        --cra-bg: #f8faff; /* สีพื้นหลังสว่างคลีนๆ เหมือนหน้า Index */
+        --cra-bg: #f8faff;
         --cra-card-bg: #ffffff;
         --cra-text-main: #334155;
         --cra-text-muted: #64748b;
@@ -27,7 +27,6 @@
 
       body { 
         background-color: var(--cra-bg); 
-        /* ลายตาข่ายจางๆ แบบ Dashboard ยุคใหม่ */
         background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
         background-size: 24px 24px;
         font-family: 'Noto Sans Thai', sans-serif !important; 
@@ -41,7 +40,6 @@
       .btn-back:hover { background: #f1f5f9; color: var(--cra-blue); transform: translateY(-2px); }
       .nav-divider { margin: 0 10px; color: #cbd5e1; }
 
-      /* 🌟 การ์ดกระจกฝ้า (Glassmorphism) เหมือนหน้า Index */
       .cra-card { 
         background: rgba(255, 255, 255, 0.85); 
         backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -64,16 +62,22 @@
       }
       .filter-box:focus { border-color: var(--cra-blue); box-shadow: 0 0 0 3px rgba(29, 43, 83, 0.1); }
 
-      /* 2. บังคับความกว้างและตัดคำเฉพาะ "ปุ่ม Dropdown" */
       select.filter-box {
         width: 250px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
       }
+      .search-group { width: 250px; }
+      .search-group .input-group-text { border-radius: 12px 0 0 12px; border-color: #e2e8f0; }
+      .search-group input { border-radius: 0 12px 12px 0; }
+
+      /* 🎯 ปรับแต่งสวิตช์ (Checkbox) */
+      .form-switch .form-check-input { cursor: pointer; width: 2.5em; height: 1.25em; }
+      .form-switch .form-check-input:checked { background-color: var(--cra-blue); border-color: var(--cra-blue); }
+
       .badge-category { background: rgba(29, 43, 83, 0.1); color: var(--cra-blue); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
 
-      /* Chart & Legend Styles */
       .chart-container { position: relative; height: 250px; width: 100%; margin-bottom: 20px;}
       .chart-center-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
       .chart-center-text .label { font-size: 0.8rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
@@ -92,7 +96,6 @@
       .legend-count { width: 50px; text-align: right; font-weight: 700; color: var(--cra-blue); }
       .legend-percent { width: 90px; text-align: right; color: var(--cra-text-muted); font-size: 0.85rem;}
 
-      /* Ranking List */
       .summary-list-container { max-height: 350px; overflow-y: auto; padding-right: 10px; }
       .summary-list-container::-webkit-scrollbar { width: 6px; }
       .summary-list-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
@@ -107,68 +110,36 @@
       .rank-3 { background-color: #b45309; box-shadow: 0 4px 10px rgba(180, 83, 9, 0.4); }
       .rank-text { color: #64748b; font-weight: 600; font-size: 0.9rem; margin-left: 5px; }
       .percent-badge { background-color: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
-      .card-header-badge { background-color: #f1f5f9; color: #475569; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
 
-      /* ตารางข้อมูลหลัก */
       .table-responsive { border-radius: 12px; }
       .cra-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-      .cra-table th { background-color: #f8fafc; color: var(--cra-text-muted); font-weight: 600; font-size: 0.85rem; padding: 16px; border-bottom: 2px solid #e2e8f0; border-top: 1px solid #e2e8f0; white-space: nowrap; }
-      .cra-table td { padding: 18px 16px; vertical-align: middle; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
+      .cra-table th, .cra-table td { vertical-align: middle; padding: 14px 16px; white-space: normal !important; }
+      .cra-table th { background-color: #f8fafc; color: var(--cra-text-muted); font-weight: 600; font-size: 0.85rem; border-bottom: 2px solid #e2e8f0; border-top: 1px solid #e2e8f0; white-space: nowrap !important; }
+      .cra-table td { border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #475569; }
       .cra-table tbody tr:nth-of-type(odd) { background-color: #ffffff; }
       .cra-table tbody tr:nth-of-type(even) { background-color: #fafbfc; }
       .cra-table tbody tr:hover td { background-color: #f1f5f9; }
       
+      .badge-category, .badge { white-space: nowrap !important; display: inline-block; }
+      .cra-table td:nth-child(2), .cra-table td.text-end { white-space: nowrap !important; }
+      .cra-table td.text-wrap { min-width: 220px; line-height: 1.5; }
+      
       .dataTables_filter, .dataTables_length { display: none !important; }
-      .dataTables_info { color: var(--cra-text-muted); text-align: center;
-          margin-bottom: 10px;
-          font-size: 0.8rem; }
-      .pagination { flex-wrap: wrap; /* อนุญาตให้ปุ่มพับลงมาได้ถ้าที่แคบไป */
-          justify-content: center;
-          gap: 2px;}
-      .page-item.active .page-link { background-color: var(--cra-blue); border-color: var(--cra-blue);padding: 6px 10px;}
+      .dataTables_info { color: var(--cra-text-muted); text-align: center; margin-bottom: 10px; font-size: 0.8rem; }
+      .pagination { flex-wrap: wrap; justify-content: center; gap: 2px;}
+      .page-item.active .page-link { background-color: var(--cra-blue); border-color: var(--cra-blue); padding: 6px 10px;}
 
-      /* Loading Screen */
       #loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s; }
       .loader-logo { font-size: 1.5rem; font-weight: 800; color: var(--cra-blue); margin-bottom: 20px; text-align: center;}
       .progress-container { width: 250px; height: 8px; background-color: #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 15px;}
       .progress-bar-fill { height: 100%; background-color: var(--cra-blue); width: 0%; transition: width 0.3s; }
       .loader-hidden { opacity: 0; pointer-events: none; }
-/* 🎯 โค้ดปรับแก้ตารางฉบับสมบูรณ์ (จัดสัดส่วนอัตโนมัติ ฉลาดขึ้น) */
-      
-      /* 1. รีเซ็ตให้ตารางทั้งหมดจัดสรรพื้นที่ตามเนื้อหา (ยอมตัดคำ/พับบรรทัดได้) */
-      .cra-table th, .cra-table td {
-        vertical-align: middle;
-        padding: 14px 16px; /* ช่องไฟกำลังสวย ไม่ถ่างเกินไป */
-        white-space: normal !important; /* ปลดล็อกให้คอลัมน์ทั่วไปพับบรรทัดได้ */
-      }
 
-      /* 2. เฉพาะ "ป้ายเม็ดยา" (สถานี, ช่อง) ห้ามตัดคำและห้ามแหว่งเด็ดขาด */
-      .badge-category, .badge {
-        white-space: nowrap !important;
-        display: inline-block;
-      }
-
-      /* 3. คอลัมน์ที่ "ห้ามแหว่ง" (วันที่ และ ยอดเงิน PR Value) */
-      .cra-table td:nth-child(2), /* ดึงคอลัมน์วันที่ */
-      .cra-table td.text-end /* ดึงคอลัมน์ยอด PR Value (เราใส่คลาส text-end ไว้) */ {
-        white-space: nowrap !important;
-      }
-
-      /* 4. คอลัมน์ "หัวข้อข่าว" ให้พื้นที่ขั้นต่ำไว้ จะได้ไม่อึดอัด */
-      .cra-table td.text-wrap {
-        min-width: 220px; 
-        line-height: 1.5;
-      }
-
-      /* 5. ปรับหน้าตามือถือให้กะทัดรัดขึ้น */
       @media (max-width: 768px) {
-        
-        /* บนมือถือ ลดช่องไฟและขนาดตัวอักษรลงนิดหน่อยเพื่อให้เห็นข้อมูลเยอะขึ้น */
-        .cra-table th, .cra-table td { 
-          padding: 10px 12px; 
-          font-size: 0.85rem; 
-        }
-        .pr-value { font-size: 1rem; } /* ปรับขนาดยอดเงินบนมือถือไม่ให้ใหญ่ล้น */
+        select.filter-box, .search-group { width: 100% !important; margin-bottom: 5px; }
+        .justify-content-lg-end { justify-content: flex-start !important; }
+        .cra-table th, .cra-table td { padding: 10px 12px; font-size: 0.85rem; }
+        .pr-value { font-size: 1rem; }
       }
     </style>
   </head>
@@ -176,7 +147,7 @@
     <div id="loader-wrapper">
       <div class="loader-logo">CRA News Dashboard 2026 <br>ข่าวโซเชียลมีเดีย</div>
       <div class="progress-container"><div class="progress-bar-fill" id="progressBar"></div></div>
-      <div class="progress-text">กำลังวิเคราะห์ข้อมูลภาพรวม... <span id="progressText" style="color: var(--cra-blue); font-weight: 700;">0</span>%</div>
+      <div class="progress-text">กำลังดึงข้อมูล... <span id="progressText" style="color: var(--cra-blue); font-weight: 700;">0</span>%</div>
     </div>
 
     <div class="container-fluid py-4 px-md-5">
@@ -266,7 +237,13 @@
             <i class="bi bi-database-fill me-2" style="color: var(--cra-orange);"></i> ฐานข้อมูลสื่อ
           </h5>
           
-          <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+          <div class="d-flex flex-wrap gap-2 justify-content-lg-end align-items-center">
+            
+            <div class="form-check form-switch d-flex align-items-center me-lg-2 mb-0">
+              <input class="form-check-input" type="checkbox" id="filterSpecial" value="พระกรณียกิจ">
+              <label class="form-check-label fw-bold ms-2" for="filterSpecial" style="color: var(--cra-blue); cursor: pointer; padding-top: 3px;">ข่าวพระกรณียกิจ</label>
+            </div>
+
             <select id="filterCategory" class="filter-box">
               <option value="">- หมวดหมู่ข่าว -</option>
             </select>
@@ -295,6 +272,7 @@
                 <th>สื่อที่เผยแพร่</th>
                 <th style="display:none;">Quarter</th>
                 <th style="display:none;">Month</th>
+                <th style="display:none;">SpecialCategory</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -309,7 +287,6 @@
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     
     <script>
-      // 🎯 ใส่ URL ของ Web App ที่ได้จาก Google Apps Script ตรงนี้
       const API_URL = "https://script.google.com/macros/s/AKfycbzU-Gg2wbHbbhWRJZR4WDbmbcQAaGgjekN-CzWIpBdZpjena09eM2h8fOdJwujwlGrKAw/exec";
       
       const chartColors = ['#1d2b53', '#ea580c', '#eab308', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#64748b', '#0ea5e9', '#f43f5e', '#14b8a6', '#84cc16', '#d946ef', '#f97316', '#06b6d4'];
@@ -389,10 +366,14 @@
       function updateDashboardWidgets() {
         let qFilter = $('#filterQuarter').val();
         let mFilter = $('#filterMonth').val();
+        // 🎯 เช็คว่าผู้ใช้เปิดสวิตช์ดูหมวดหมู่พิเศษเสริมหรือเปล่า
+        let isSpecialChecked = $('#filterSpecial').is(':checked'); 
 
         let timeFilteredData = globalData.filter(item => {
             if (qFilter && item.quarter !== qFilter) return false;
             if (mFilter && item.month !== mFilter) return false;
+            // 🎯 กรองข้อมูลในกราฟให้แสดงเฉพาะ "พระกรณียกิจ" ทันทีที่สวิตช์เปิด
+            if (isSpecialChecked && !item.special.includes("พระกรณียกิจ")) return false; 
             return true;
         });
 
@@ -432,7 +413,7 @@
         $('#sumPR').text(sumPr.toLocaleString('th-TH', {maximumFractionDigits:0}));
         $('#totalNews').text(finalFiltered.length);
 
-        let statusText = (qFilter || mFilter || cFilter || tFilter) ? "เฉพาะข้อมูลที่กรอง" : "รวมทั้งหมด";
+        let statusText = (qFilter || mFilter || cFilter || tFilter || isSpecialChecked) ? "เฉพาะข้อมูลที่กรอง" : "รวมทั้งหมด";
         $('#badgeCategory, #badgeType').text(statusText);
 
         renderDonutChart('categoryChart', 'categoryLegend', 'categoryTotal', analyzeObj(finalFiltered, 'category'));
@@ -441,22 +422,23 @@
         renderRankingList('sourceRankingList', analyzeObj(finalFiltered, 'source'), 20);
 
         let table = $('#dataTable').DataTable();
-        table.column(8).search(qFilter);
-        table.column(9).search(mFilter);
-        table.column(3).search(cFilter);
-        table.column(5).search(tFilter); 
+        table.column(8).search(qFilter); // ไตรมาส
+        table.column(9).search(mFilter); // เดือน
+        table.column(10).search(isSpecialChecked ? "พระกรณียกิจ" : ""); // 🎯 สั่งให้ตารางกรอง "หมวดหมู่พิเศษเสริม"
+        table.column(3).search(cFilter); // หมวดหมู่
+        table.column(5).search(tFilter); // ประเภทข่าว
         table.search(sFilter).draw();
       }
 
       $(document).ready(function() {
-        let progress = 0;
+        let progress = 15;
         let progressInterval = setInterval(function() {
           if (progress < 90) {
-            progress += Math.floor(Math.random() * 10) + 5;
+            progress += Math.floor(Math.random() * 5) + 2;
             if (progress > 90) progress = 90;
             $('#progressBar').css('width', progress + '%'); $('#progressText').text(progress);
           }
-        }, 300); 
+        }, 150); 
 
         function finishLoading() {
           clearInterval(progressInterval);
@@ -464,12 +446,9 @@
           setTimeout(function() { $('#loader-wrapper').addClass('loader-hidden'); }, 500); 
         }
 
-        // 🎯 จุดที่เปลี่ยน: ใช้ fetch API ดึงข้อมูลแทน google.script.run
-        // สังเกตการต่อ URL ด้วย ?action=getSheetData&sheetName=FreeMedia
         fetch(API_URL + "?action=getSheetData&sheetName=FreeMedia", { redirect: "follow" })
           .then(response => response.json())
           .then(data => {
-            // เช็คว่ามี Error จากฝั่ง Apps Script หรือไม่
             if(data.error) throw new Error(data.error);
 
             let tbody = '';
@@ -479,18 +458,24 @@
             data.forEach(function(row, index) {
               if(!row[1] && !row[2]) return;
 
-              let prVal = parseFloat(String(row[7]).replace(/,/g, '')) || 0;
+              // 🎯 การอ่านค่าแบบใหม่ (ขยับ Index ถอยหลังไป 1 ขั้นสำหรับคอลัมน์หลัง D)
+              let date = row[1];
               let projectTextRaw = row[2] || "";
-              let quarterVal = row[9] ? row[9].trim() : ""; 
-              let projectUrl = row[10]; 
-              let stdMonth = getStandardMonth(row[1]);
+              let specialCategory = row[3] ? String(row[3]).trim() : ""; // 🎯 คอลัมน์ D ใหม่ (หมวดหมู่พิเศษเสริม)
+              let category = row[4] ? String(row[4]).trim() : "ไม่ระบุ"; // 🎯 เดิม row[3] ขยับเป็น 4
+              let type = row[5] ? String(row[5]).trim() : "ไม่ระบุ"; // 🎯 ขยับเป็น 5
+              let source = row[6] ? String(row[6]).trim() : "ไม่ระบุ"; // 🎯 ขยับเป็น 6
+              let media = row[7] ? String(row[7]).trim() : "ไม่ระบุ"; // 🎯 ขยับเป็น 7
+              let prVal = parseFloat(String(row[8]).replace(/,/g, '')) || 0; // 🎯 ขยับเป็น 8 (คอลัมน์ PR Value)
+              let quarterVal = row[10] ? String(row[10]).trim() : ""; // 🎯 ขยับเป็น 10
+              let projectUrl = row[11]; // 🎯 ขยับเป็น 11
+              let stdMonth = getStandardMonth(date);
 
               globalData.push({
-                date: row[1], project_raw: projectTextRaw,
-                category: row[3] ? row[3].trim() : "ไม่ระบุ",
-                type: row[4] ? row[4].trim() : "ไม่ระบุ",
-                source: row[5] ? row[5].trim() : "ไม่ระบุ",
-                media: row[6] ? row[6].trim() : "ไม่ระบุ",
+                date: date, project_raw: projectTextRaw,
+                special: specialCategory, // 🎯 เก็บค่าหมวดหมู่พิเศษ
+                category: category, type: type,
+                source: source, media: media,
                 prValue: prVal, quarter: quarterVal, month: stdMonth
               });
 
@@ -504,28 +489,27 @@
 
               tbody += `<tr>
                 <td class="text-center text-muted">${index + 1}</td>
-                <td>${row[1]}</td>
+                <td>${date}</td>
                 <td class="fw-medium text-wrap" style="max-width: 250px;">${projectHtml}</td>
-                <td><span class="badge-category">${row[3]}</span></td>
+                <td><span class="badge-category">${category}</span></td>
                 <td class="fw-bold text-end pe-4" style="color: var(--cra-blue); font-size: 1.05rem;">
                   ${prVal.toLocaleString('th-TH', {maximumFractionDigits:0})} 
                   <span style="font-size: 0.75rem; font-weight: normal; color: var(--cra-text-muted); margin-left: 2px;">บาท</span>
                 </td>
-                <td>${row[4]}</td>
-                <td>${row[5]}</td>
-                <td class="text-muted">${row[6]}</td>
-                <td style="display:none;">${quarterVal}</td><td style="display:none;">${stdMonth}</td>
-              </tr>`;
+                <td>${type}</td>
+                <td>${source}</td>
+                <td class="text-muted">${media}</td>
+                <td style="display:none;">${quarterVal}</td>
+                <td style="display:none;">${stdMonth}</td>
+                <td style="display:none;">${specialCategory}</td> </tr>`;
             });
 
             [...quartersForFilter].sort().forEach(q => $('#filterQuarter').append(new Option("ไตรมาส: " + q, q)));
             [...monthsForFilter].sort().forEach(m => { let displayMonth = m.substring(3); $('#filterMonth').append(new Option("เดือน: " + displayMonth, m)); });
 
             $('#dataTable tbody').html(tbody);
-            // 🎯 บังคับให้แสดงตัวเลขแค่ 5 ช่อง (เช่น < 1 2 3 ... 90 >)
             $.fn.DataTable.ext.pager.numbers_length = 5;
 
-            // 🎯 สร้างตารางพร้อมเตรียมพื้นที่ว่าง (jump-to-page) ไว้ใส่กล่องพิมพ์เลข
             let table = $('#dataTable').DataTable({ 
               "dom": 't<"d-flex flex-column flex-md-row justify-content-between align-items-center mt-4"i<"d-flex flex-column flex-md-row align-items-center gap-2"p<"jump-to-page">>>',
               "pageLength": 10, 
@@ -539,41 +523,37 @@
               } 
             });
 
-            // 🎯 สร้างหน้าตาของ "กล่องพิมพ์ตัวเลข"
             let jumpHtml = `
               <div class="d-flex align-items-center justify-content-center mt-2 mt-md-0 ms-md-2">
                 <span class="text-muted me-2" style="font-size: 0.8rem;">หน้า:</span>
                 <input type="number" id="jumpInput" class="form-control text-center shadow-sm px-1" style="width: 55px; height: 32px; border-radius: 8px; font-size: 0.85rem; border: 1px solid #cbd5e1;" min="1">
               </div>
             `;
-            $("div.jump-to-page").html(jumpHtml); // นำกล่องไปแปะข้างๆ ปุ่มเปลี่ยนหน้า
+            $("div.jump-to-page").html(jumpHtml); 
 
-            // 🎯 ระบบทำงาน: เมื่อพิมพ์ตัวเลขเสร็จ (แล้วกด Enter หรือกดคลิกที่อื่น)
             $('#jumpInput').on('change', function() {
-              let targetPage = parseInt($(this).val(), 10); // ดึงเลขที่ผู้ใช้พิมพ์
-              let maxPage = table.page.info().pages; // เช็คว่ามีหน้าสูงสุดกี่หน้า
-              
+              let targetPage = parseInt($(this).val(), 10); 
+              let maxPage = table.page.info().pages; 
               if (targetPage >= 1 && targetPage <= maxPage) {
-                table.page(targetPage - 1).draw('page'); // สั่งเปลี่ยนหน้าทันที!
+                table.page(targetPage - 1).draw('page'); 
               } else {
-                $(this).val(table.page.info().page + 1); // ถ้าพิมพ์มั่ว (เช่น หน้า 999) ให้เด้งกลับหน้าปัจจุบัน
+                $(this).val(table.page.info().page + 1); 
               }
             });
 
-            // 🎯 ระบบทำงาน: อัปเดตเลขในกล่องอัตโนมัติ เวลาเรากดปุ่ม < หรือ >
             table.on('draw', function() {
               let info = table.page.info();
               $('#jumpInput').val(info.page + 1).attr('max', info.pages);
             });
 
-            $('#filterQuarter, #filterMonth, #filterCategory, #filterType').on('change', function() { updateDashboardWidgets(); }); 
+            // 🎯 มัดรวมสวิตช์เข้าไปให้ทำงานเหมือนกับ Filter ตัวอื่นๆ
+            $('#filterQuarter, #filterMonth, #filterCategory, #filterType, #filterSpecial').on('change', function() { updateDashboardWidgets(); }); 
             $('#customSearch').on('keyup', function() { updateDashboardWidgets(); });
 
             updateDashboardWidgets();
             finishLoading();
           })
           .catch(error => {
-            // 🎯 จัดการ Error หากดึงข้อมูลไม่สำเร็จ
             console.error("Error:", error); 
             alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + error.message); 
             finishLoading();
