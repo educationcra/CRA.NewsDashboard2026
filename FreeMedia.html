@@ -367,13 +367,11 @@
       function updateDashboardWidgets() {
         let qFilter = $('#filterQuarter').val();
         let mFilter = $('#filterMonth').val();
-        // 🎯 เช็คว่าผู้ใช้เปิดสวิตช์ดูหมวดหมู่พิเศษเสริมหรือเปล่า
         let isSpecialChecked = $('#filterSpecial').is(':checked'); 
 
         let timeFilteredData = globalData.filter(item => {
             if (qFilter && item.quarter !== qFilter) return false;
             if (mFilter && item.month !== mFilter) return false;
-            // 🎯 กรองข้อมูลในกราฟให้แสดงเฉพาะ "พระกรณียกิจ" ทันทีที่สวิตช์เปิด
             if (isSpecialChecked && !item.special.includes("พระกรณียกิจ")) return false; 
             return true;
         });
@@ -423,13 +421,15 @@
         renderRankingList('sourceRankingList', analyzeObj(finalFiltered, 'source'), 20);
 
         let table = $('#dataTable').DataTable();
-        // 🎯 3. ขยับตัวเลข Index คอลัมน์บวกเพิ่มไปอีก 1 ทั้งหมด
-        table.column(9).search(qFilter); // ไตรมาส (เดิม 8 ขยับเป็น 9)
-        table.column(10).search(mFilter); // เดือน (เดิม 9 ขยับเป็น 10)
-        table.column(11).search(isSpecialChecked ? "พระกรณียกิจ" : ""); // หมวดหมู่พิเศษซ่อน (เดิม 10 ขยับเป็น 11)
-        table.column(4).search(cFilter); // หมวดหมู่ (เดิม 3 ขยับเป็น 4)
-        table.column(6).search(tFilter); // ประเภทข่าว (เดิม 5 ขยับเป็น 6)
+        
+        // 🎯 เติมปีกกาปิด } ตรงนี้ครับ
+        table.column(9).search(qFilter); 
+        table.column(10).search(mFilter); 
+        table.column(11).search(isSpecialChecked ? "พระกรณียกิจ" : ""); 
+        table.column(4).search(cFilter); 
+        table.column(6).search(tFilter); 
         table.search(sFilter).draw();
+      } // <--- ปีกกาตัวนี้คือตัวช่วยชีวิตครับ!
 
       $(document).ready(function() {
         let progress = 15;
@@ -459,22 +459,21 @@
             data.forEach(function(row, index) {
               if(!row[1] && !row[2]) return;
 
-              // 🎯 การอ่านค่าแบบใหม่ (ขยับ Index ถอยหลังไป 1 ขั้นสำหรับคอลัมน์หลัง D)
               let date = row[1];
               let projectTextRaw = row[2] || "";
-              let specialCategory = row[3] ? String(row[3]).trim() : ""; // 🎯 คอลัมน์ D ใหม่ (หมวดหมู่พิเศษเสริม)
-              let category = row[4] ? String(row[4]).trim() : "ไม่ระบุ"; // 🎯 เดิม row[3] ขยับเป็น 4
-              let type = row[5] ? String(row[5]).trim() : "ไม่ระบุ"; // 🎯 ขยับเป็น 5
-              let source = row[6] ? String(row[6]).trim() : "ไม่ระบุ"; // 🎯 ขยับเป็น 6
-              let media = row[7] ? String(row[7]).trim() : "ไม่ระบุ"; // 🎯 ขยับเป็น 7
-              let prVal = parseFloat(String(row[8]).replace(/,/g, '')) || 0; // 🎯 ขยับเป็น 8 (คอลัมน์ PR Value)
-              let quarterVal = row[10] ? String(row[10]).trim() : ""; // 🎯 ขยับเป็น 10
-              let projectUrl = row[11]; // 🎯 ขยับเป็น 11
+              let specialCategory = row[3] ? String(row[3]).trim() : ""; 
+              let category = row[4] ? String(row[4]).trim() : "ไม่ระบุ"; 
+              let type = row[5] ? String(row[5]).trim() : "ไม่ระบุ"; 
+              let source = row[6] ? String(row[6]).trim() : "ไม่ระบุ"; 
+              let media = row[7] ? String(row[7]).trim() : "ไม่ระบุ"; 
+              let prVal = parseFloat(String(row[8]).replace(/,/g, '')) || 0; 
+              let quarterVal = row[10] ? String(row[10]).trim() : ""; 
+              let projectUrl = row[11]; 
               let stdMonth = getStandardMonth(date);
 
               globalData.push({
                 date: date, project_raw: projectTextRaw,
-                special: specialCategory, // 🎯 เก็บค่าหมวดหมู่พิเศษ
+                special: specialCategory, 
                 category: category, type: type,
                 source: source, media: media,
                 prValue: prVal, quarter: quarterVal, month: stdMonth
@@ -488,7 +487,6 @@
               if(quarterVal) quartersForFilter.add(quarterVal);
               if(stdMonth) monthsForFilter.add(stdMonth);
 
-              // 🎯 2. สร้างตัวแปรเช็คไอคอน SVG (ใช้ Bootstrap Icons)
               let specialIcon = specialCategory.includes("พระกรณียกิจ") 
                 ? `<i class="bi bi-check-circle-fill" style="color: #10b981; font-size: 1.2rem;"></i>` 
                 : `<i class="bi bi-x" style="color: #cbd5e1; font-size: 1.5rem;"></i>`;
@@ -510,7 +508,8 @@
                 <td style="display:none;">${stdMonth}</td>
                 <td style="display:none;">${specialCategory}</td>
               </tr>`;
-});
+            }); 
+
             [...quartersForFilter].sort().forEach(q => $('#filterQuarter').append(new Option("ไตรมาส: " + q, q)));
             [...monthsForFilter].sort().forEach(m => { let displayMonth = m.substring(3); $('#filterMonth').append(new Option("เดือน: " + displayMonth, m)); });
 
@@ -553,7 +552,6 @@
               $('#jumpInput').val(info.page + 1).attr('max', info.pages);
             });
 
-            // 🎯 มัดรวมสวิตช์เข้าไปให้ทำงานเหมือนกับ Filter ตัวอื่นๆ
             $('#filterQuarter, #filterMonth, #filterCategory, #filterType, #filterSpecial').on('change', function() { updateDashboardWidgets(); }); 
             $('#customSearch').on('keyup', function() { updateDashboardWidgets(); });
 
