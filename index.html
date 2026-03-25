@@ -43,6 +43,29 @@
       .total-unit { font-size: 1.5rem; font-weight: 500; color: #64748b; margin-left: 12px; }
       .badge-premium { background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important; color: #ffffff !important; border: none; font-size: 1rem; font-weight: 500; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.25); padding: 10px 25px !important; letter-spacing: 0.5px; }
 
+      /* 🎯 สไตล์สำหรับการ์ดไตรมาส (Quarter Cards) */
+      .quarter-card {
+        background: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        padding: 1.2rem 1rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+      }
+      .quarter-card:hover {
+        background: rgba(255, 255, 255, 0.85);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(99, 102, 241, 0.08);
+      }
+      .q-title { font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 5px; }
+      .q-value { font-size: 1.4rem; font-weight: 800; color: #1e3a8a; margin-bottom: 8px; }
+      .q-note { font-size: 0.75rem; color: #ea580c; font-weight: 600; background: rgba(234, 88, 12, 0.1); border-radius: 20px; padding: 4px 10px; display: inline-block; margin: 0 auto; }
+
       .lottie-container { position: relative; width: 100%; display: flex; justify-content: flex-end; align-items: center; }
       .lottie-glow { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0; }
       lottie-player { position: relative; z-index: 1; transform: scale(1.05) translateX(10px); margin: -1rem 0; }
@@ -59,25 +82,15 @@
       .pr-value { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
       .loading-state { opacity: 0.5; pointer-events: none; filter: grayscale(20%); }
       
-      /* 📱 อัปเกรดส่วนมือถือ (Mobile Responsive) */
       @media (max-width: 768px) {
-         /* ลดระยะห่างด้านข้างเหลือ 20px */
          .container { padding-left: 20px !important; padding-right: 20px !important; }
-         
-         /* ลดขนาดฟอนต์หัวข้อไม่ให้ล้นจอ */
          .main-title { font-size: 2.5rem; }
          .main-subtitle { font-size: 1rem; padding: 0 10px; }
-         
-         /* ปรับการ์ดยอดรวมให้พอดีมือถือ */
          .hero-card { padding: 2rem 1.5rem; border-radius: 24px; text-align: center; }
          .total-value { font-size: 3.5rem; }
-         
-         /* 🎯 นำ Lottie กลับมาบนมือถือ จัดให้อยู่ตรงกลาง */
          .lottie-container { justify-content: center; margin-top: 2rem; }
          lottie-player { transform: scale(1) translateX(0); max-width: 250px !important; margin: 0; }
          .lottie-glow { width: 200px; height: 200px; }
-
-         /* ปรับการ์ดเมนูย่อย */
          .nav-card { padding: 2rem 1.5rem; }
          .pr-value { font-size: 2rem; }
       }
@@ -93,8 +106,8 @@
 
       <div class="fade-in-up" style="animation-delay: 0.2s;">
         <div class="hero-card" id="heroCard">
-          <div class="row align-items-center">
-            
+          
+          <div class="row align-items-center mb-4">
             <div class="col-lg-6 text-center text-lg-start mb-2 mb-lg-0" style="position: relative; z-index: 2;">
               <div class="total-label">มูลค่าประชาสัมพันธ์รวม (Total PR Value)</div>
               <div class="d-flex align-items-baseline justify-content-center justify-content-lg-start">
@@ -113,9 +126,52 @@
                  <lottie-player src="https://lottie.host/dec249fe-ece9-41a0-ba38-73d634e7ca1d/Tk5rYhXSaw.json" background="transparent" speed="1" style="width: 100%; max-width: 450px; height: auto;" loop autoplay></lottie-player>
                </div>
             </div>
+          </div>
+
+          <div class="row g-3 pt-3 mt-2 border-top" style="border-color: rgba(255,255,255,0.4) !important; position: relative; z-index: 2;">
+            
+            <div class="col-6 col-lg-3">
+              <div class="quarter-card">
+                <div>
+                  <div class="q-title">ไตรมาส 1</div>
+                  <div class="q-value">฿<span id="q1Pr">0</span></div>
+                </div>
+                <div class="q-note"><i class="bi bi-award-fill"></i> พระกรณียกิจ <span id="q1Special">0</span> ข่าว</div>
+              </div>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <div class="quarter-card">
+                <div>
+                  <div class="q-title">ไตรมาส 2</div>
+                  <div class="q-value">฿<span id="q2Pr">0</span></div>
+                </div>
+                <div class="q-note"><i class="bi bi-award-fill"></i> พระกรณียกิจ <span id="q2Special">0</span> ข่าว</div>
+              </div>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <div class="quarter-card">
+                <div>
+                  <div class="q-title">ไตรมาส 3</div>
+                  <div class="q-value">฿<span id="q3Pr">0</span></div>
+                </div>
+                <div class="q-note"><i class="bi bi-award-fill"></i> พระกรณียกิจ <span id="q3Special">0</span> ข่าว</div>
+              </div>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <div class="quarter-card">
+                <div>
+                  <div class="q-title">ไตรมาส 4</div>
+                  <div class="q-value">฿<span id="q4Pr">0</span></div>
+                </div>
+                <div class="q-note"><i class="bi bi-award-fill"></i> พระกรณียกิจ <span id="q4Special">0</span> ข่าว</div>
+              </div>
+            </div>
 
           </div>
-        </div>
+          </div>
       </div>
 
       <div class="row g-4 mb-4">
@@ -161,6 +217,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       const API_URL = "https://script.google.com/macros/s/AKfycbzU-Gg2wbHbbhWRJZR4WDbmbcQAaGgjekN-CzWIpBdZpjena09eM2h8fOdJwujwlGrKAw/exec";
+      
       function animateValue(id, start, end, duration, suffix = '') {
         const obj = document.getElementById(id); let startTimestamp = null;
         const step = (timestamp) => {
@@ -184,10 +241,19 @@
             let bhtMain = '<span class="total-unit">บาท</span>';
             let bhtCard = '<span style="font-size: 1.3rem; color: #94a3b8; font-weight: 500; margin-left: 4px;">฿</span>';
             
+            // แอนิเมชันยอดรวมใหญ่ และ การ์ดย่อย 3 ใบ
             animateValue("totalPrMain", 0, total, 1500, bhtMain);
             animateValue("prMedia", 0, data.media, 1500, bhtCard);
             animateValue("prTv", 0, data.tv, 1500, bhtCard);
             animateValue("prRadio", 0, data.radio, 1500, bhtCard);
+            
+            // 🎯 แอนิเมชันสำหรับ 4 กล่องไตรมาสใหม่ที่ถูกดึงมาจาก API
+            if(data.quarters) {
+              [1, 2, 3, 4].forEach(q => {
+                animateValue(`q${q}Pr`, 0, data.quarters[q].pr, 1500, '');
+                $(`#q${q}Special`).text(data.quarters[q].special);
+              });
+            }
             
             $('.nav-card').removeClass('loading-state');
           })
