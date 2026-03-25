@@ -509,7 +509,7 @@
                 <td style="display:none;">${stdMonth}</td>
                 <td style="display:none;">${specialCategory}</td>
               </tr>`;
-
+});
             [...quartersForFilter].sort().forEach(q => $('#filterQuarter').append(new Option("ไตรมาส: " + q, q)));
             [...monthsForFilter].sort().forEach(m => { let displayMonth = m.substring(3); $('#filterMonth').append(new Option("เดือน: " + displayMonth, m)); });
 
