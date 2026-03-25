@@ -311,7 +311,32 @@
         if(str.includes('ธันวาคม') || str.includes('ธ.ค.') || str.includes('dec')) return "12-ธันวาคม";
         return "";
       }
-
+  function formatThaiDate(rawDate) {
+        if (!rawDate) return "";
+        let str = String(rawDate).trim();
+        
+        // 🎯 ค้นหารูปแบบ YYYY-MM-DD (พร้อมตัดเวลา HH:mm:ss ทิ้งอัตโนมัติ)
+        let regex = /^(\d{4})[-\/](\d{2})[-\/](\d{2})/;
+        let match = str.match(regex);
+        
+        if (match) {
+          let year = parseInt(match[1], 10);
+          let month = parseInt(match[2], 10);
+          let day = parseInt(match[3], 10);
+          
+          // เปลี่ยน ค.ศ. เป็น พ.ศ. (ถ้ามันเป็น 2026 ก็บวก 543 ให้กลายเป็น 2569)
+          let thaiYear = year < 2500 ? year + 543 : year;
+          
+          // ตารางเทียบชื่อเดือนย่อ
+          const thaiMonths = ["", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+          
+          return `${day} ${thaiMonths[month]} ${thaiYear}`;
+        }
+        
+        // ถ้ารูปแบบไม่ตรง YYYY-MM-DD ให้ส่งค่าเดิมกลับไปแสดงผล (เพื่อความปลอดภัย)
+        return str; 
+      }
+      
       function analyzeObj(dataArray, key) {
         let counts = {}; let total = 0;
         dataArray.forEach(item => {
@@ -458,8 +483,8 @@
             
             data.forEach(function(row, index) {
               if(!row[1] && !row[2]) return;
-
-              let date = row[1];
+              let rawDate = row[1];
+              let date = formatThaiDate(rawDate);
               let projectTextRaw = row[2] || "";
               let specialCategory = row[3] ? String(row[3]).trim() : ""; 
               let category = row[4] ? String(row[4]).trim() : "ไม่ระบุ"; 
