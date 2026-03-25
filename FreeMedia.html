@@ -422,13 +422,13 @@
         renderRankingList('sourceRankingList', analyzeObj(finalFiltered, 'source'), 20);
 
         let table = $('#dataTable').DataTable();
-        table.column(8).search(qFilter); // ไตรมาส
-        table.column(9).search(mFilter); // เดือน
-        table.column(10).search(isSpecialChecked ? "พระกรณียกิจ" : ""); // 🎯 สั่งให้ตารางกรอง "หมวดหมู่พิเศษเสริม"
-        table.column(3).search(cFilter); // หมวดหมู่
-        table.column(5).search(tFilter); // ประเภทข่าว
+        // 🎯 3. ขยับตัวเลข Index คอลัมน์บวกเพิ่มไปอีก 1 ทั้งหมด
+        table.column(9).search(qFilter); // ไตรมาส (เดิม 8 ขยับเป็น 9)
+        table.column(10).search(mFilter); // เดือน (เดิม 9 ขยับเป็น 10)
+        table.column(11).search(isSpecialChecked ? "พระกรณียกิจ" : ""); // หมวดหมู่พิเศษซ่อน (เดิม 10 ขยับเป็น 11)
+        table.column(4).search(cFilter); // หมวดหมู่ (เดิม 3 ขยับเป็น 4)
+        table.column(6).search(tFilter); // ประเภทข่าว (เดิม 5 ขยับเป็น 6)
         table.search(sFilter).draw();
-      }
 
       $(document).ready(function() {
         let progress = 15;
@@ -487,10 +487,16 @@
               if(quarterVal) quartersForFilter.add(quarterVal);
               if(stdMonth) monthsForFilter.add(stdMonth);
 
+              // 🎯 2. สร้างตัวแปรเช็คไอคอน SVG (ใช้ Bootstrap Icons)
+              let specialIcon = specialCategory.includes("พระกรณียกิจ") 
+                ? `<i class="bi bi-check-circle-fill" style="color: #10b981; font-size: 1.2rem;"></i>` 
+                : `<i class="bi bi-x" style="color: #cbd5e1; font-size: 1.5rem;"></i>`;
+
               tbody += `<tr>
                 <td class="text-center text-muted">${index + 1}</td>
                 <td>${date}</td>
                 <td class="fw-medium text-wrap" style="max-width: 250px;">${projectHtml}</td>
+                <td class="text-center">${specialIcon}</td>
                 <td><span class="badge-category">${category}</span></td>
                 <td class="fw-bold text-end pe-4" style="color: var(--cra-blue); font-size: 1.05rem;">
                   ${prVal.toLocaleString('th-TH', {maximumFractionDigits:0})} 
@@ -501,8 +507,8 @@
                 <td class="text-muted">${media}</td>
                 <td style="display:none;">${quarterVal}</td>
                 <td style="display:none;">${stdMonth}</td>
-                <td style="display:none;">${specialCategory}</td> </tr>`;
-            });
+                <td style="display:none;">${specialCategory}</td>
+              </tr>`;
 
             [...quartersForFilter].sort().forEach(q => $('#filterQuarter').append(new Option("ไตรมาส: " + q, q)));
             [...monthsForFilter].sort().forEach(m => { let displayMonth = m.substring(3); $('#filterMonth').append(new Option("เดือน: " + displayMonth, m)); });
