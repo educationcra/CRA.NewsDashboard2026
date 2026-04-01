@@ -397,38 +397,57 @@
         let mFilter = $('#filterMonth').val();
         let isSpecialChecked = $('#filterSpecial').is(':checked'); 
 
-        let timeFilteredData = globalData.filter(item => {
+        // 1. กรองข้อมูลจากเวลาและสวิตช์ก่อน (เป็นฐานข้อมูลตั้งต้น)
+        let baseFilteredData = globalData.filter(item => {
             if (qFilter && item.quarter !== qFilter) return false;
             if (mFilter && item.month !== mFilter) return false;
             if (isSpecialChecked && !item.special.includes("พระกรณียกิจ")) return false; 
             return true;
         });
 
-        let availableCategories = new Set();
-        let availableTypes = new Set();
-        timeFilteredData.forEach(item => {
-            availableCategories.add(item.category);
-            availableTypes.add(item.type);
-        });
-
+        // 2. ดึงค่าที่ผู้ใช้กำลังเลือกอยู่ในปัจจุบัน
         let currentCat = $('#filterCategory').val();
         let currentType = $('#filterType').val();
 
+        // 3. 🎯 ความฉลาดอยู่ตรงนี้: เตรียมรายการ Dropdown ใหม่
+        let availableCategories = new Set();
+        let availableTypes = new Set();
+        
+        baseFilteredData.forEach(item => {
+            // หมวดหมู่ข่าว: โชว์ทั้งหมดที่มีในช่วงเวลานั้น
+            availableCategories.add(item.category);
+            
+            // ประเภทข่าว: ถ้ามีการเลือก "หมวดหมู่" ไว้ ให้เอามาเฉพาะประเภทที่ตรงกับหมวดหมู่นั้น!
+            if (currentCat && item.category !== currentCat) {
+                return; // ข้ามไป ไม่เอามาใส่ Dropdown
+            }
+            availableTypes.add(item.type);
+        });
+
+        // 4. สร้างตัวเลือก หมวดหมู่ข่าว ใหม่
         $('#filterCategory').empty().append('<option value="">- หมวดหมู่ข่าว -</option>');
         [...availableCategories].sort().forEach(c => $('#filterCategory').append(new Option(c, c)));
-        if(availableCategories.has(currentCat)) $('#filterCategory').val(currentCat);
+        if(availableCategories.has(currentCat)) {
+            $('#filterCategory').val(currentCat);
+        } else {
+            currentCat = ""; // รีเซ็ตถ้าค่าที่เคยเลือกไม่มีในลิตส์แล้ว
+        }
 
+        // 5. สร้างตัวเลือก ประเภทข่าว ใหม่ (ที่ถูกกรองให้สัมพันธ์กับหมวดหมู่แล้ว)
         $('#filterType').empty().append('<option value="">- ประเภทข่าว -</option>');
         [...availableTypes].sort().forEach(t => $('#filterType').append(new Option(t, t)));
-        if(availableTypes.has(currentType)) $('#filterType').val(currentType);
+        if(availableTypes.has(currentType)) {
+            $('#filterType').val(currentType);
+        } else {
+            currentType = ""; // 🎯 รีเซ็ตประเภทข่าวอัตโนมัติ ถ้ามันไม่สอดคล้องกับหมวดหมู่ใหม่
+        }
 
-        let cFilter = $('#filterCategory').val();
-        let tFilter = $('#filterType').val();
         let sFilter = $('#customSearch').val().toLowerCase();
 
-        let finalFiltered = timeFilteredData.filter(item => {
-            if (cFilter && item.category !== cFilter) return false;
-            if (tFilter && item.type !== tFilter) return false;
+        // 6. กรองข้อมูลรอบสุดท้าย เพื่อเอาไปวาดกราฟและตาราง
+        let finalFiltered = baseFilteredData.filter(item => {
+            if (currentCat && item.category !== currentCat) return false;
+            if (currentType && item.type !== currentType) return false;
             if (sFilter) {
                 let textToSearch = `${item.date} ${item.project_raw} ${item.category} ${item.type} ${item.source} ${item.media}`.toLowerCase();
                 if (!textToSearch.includes(sFilter)) return false;
@@ -440,7 +459,7 @@
         $('#sumPR').text(sumPr.toLocaleString('th-TH', {maximumFractionDigits:0}));
         $('#totalNews').text(finalFiltered.length);
 
-        let statusText = (qFilter || mFilter || cFilter || tFilter || isSpecialChecked) ? "เฉพาะข้อมูลที่กรอง" : "รวมทั้งหมด";
+        let statusText = (qFilter || mFilter || currentCat || currentType || isSpecialChecked) ? "เฉพาะข้อมูลที่กรอง" : "รวมทั้งหมด";
         $('#badgeCategory, #badgeType').text(statusText);
 
         renderDonutChart('categoryChart', 'categoryLegend', 'categoryTotal', analyzeObj(finalFiltered, 'category'));
@@ -450,14 +469,13 @@
 
         let table = $('#dataTable').DataTable();
         
-        // 🎯 เติมปีกกาปิด } ตรงนี้ครับ
         table.column(9).search(qFilter); 
         table.column(10).search(mFilter); 
         table.column(11).search(isSpecialChecked ? "พระกรณียกิจ" : ""); 
-        table.column(4).search(cFilter); 
-        table.column(6).search(tFilter); 
+        table.column(4).search(currentCat); // ใช้ค่าที่ผ่านการตรวจสอบแล้ว
+        table.column(6).search(currentType); // ใช้ค่าที่ผ่านการตรวจสอบแล้ว
         table.search(sFilter).draw();
-      } // <--- ปีกกาตัวนี้คือตัวช่วยชีวิตครับ!
+      }
 
       $(document).ready(function() {
         let progress = 15;
