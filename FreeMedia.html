@@ -404,7 +404,6 @@
         $('#' + legendId).html(legendHtml + '</div>');
       }
 
-      // 🎯 แกนหลักความฉลาดของ Filter ทั้งหน้า
       function updateDashboardWidgets(rebuildDropdowns = true) {
         let qFilter = $('#filterQuarter').val();
         let mFilter = $('#filterMonth').val();
@@ -443,10 +442,13 @@
             [...availableTypes].sort().forEach(t => {
                let isChecked = currentTypes.includes(t) ? 'checked' : '';
                
+               // 🎯 แก้บัคหัวใจหลัก: แปลงเครื่องหมาย " และ ' ให้เป็นรหัส HTML ที่ปลอดภัย
+               let safeValue = String(t).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+               
                typeListHtml += `
                  <li>
                    <label class="dropdown-item d-flex align-items-start custom-check-label">
-                     <input class="form-check-input type-checkbox me-3 flex-shrink-0" type="checkbox" value="${t}" ${isChecked}>
+                     <input class="form-check-input type-checkbox me-3 flex-shrink-0" type="checkbox" value="${safeValue}" ${isChecked}>
                      <span class="flex-grow-1" style="line-height: 1.4; color: #334155; font-size: 0.9rem;">${t}</span>
                    </label>
                  </li>
@@ -470,6 +472,7 @@
 
         let finalFiltered = baseFilteredData.filter(item => {
             if (currentCat && item.category !== currentCat) return false;
+            // 🎯 เช็คกับค่าที่เลือกไว้ได้อย่างสมบูรณ์แล้ว
             if (currentTypes.length > 0 && !currentTypes.includes(item.type)) return false;
             if (sFilter) {
                 let textToSearch = `${item.date} ${item.project_raw} ${item.category} ${item.type} ${item.source} ${item.media}`.toLowerCase();
@@ -497,6 +500,7 @@
         table.column(11).search(isSpecialChecked ? "พระกรณียกิจ" : ""); 
         table.column(4).search(currentCat); 
         
+        // 🎯 สั่งตารางค้นหา โดยบังคับหนีตัวอักษรพิเศษทุกชนิดใน Regex
         if (currentTypes.length > 0) {
             let escapeRegex = (s) => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
             let regexPattern = '^(' + currentTypes.map(escapeRegex).join('|') + ')$';
@@ -507,7 +511,7 @@
         
         table.search(sFilter).draw();
       }
-
+      
       $(document).ready(function() {
         let progress = 15;
         let progressInterval = setInterval(function() {
