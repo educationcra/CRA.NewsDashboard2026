@@ -141,6 +141,20 @@
       .type-dropdown .dropdown-item { border-radius: 8px; transition: 0.2s; white-space: normal; }
       .type-dropdown .dropdown-item:hover { background-color: #f1f5f9; }
       .type-dropdown .form-check-input { cursor: pointer; }
+      /* 🎯 ขยายความกว้างกล่อง Dropdown (เฉพาะตัวที่กางออกมา) บนหน้าจอคอมพิวเตอร์ */
+      @media (min-width: 769px) {
+        .type-dropdown .dropdown-menu {
+          min-width: 380px !important; /* ขยายความกว้างเป็น 380px (ปรับเลขได้ตามชอบ) */
+          width: 380px !important;
+          white-space: normal; /* ยอมให้ข้อความพับบรรทัดได้ถ้ายาวเกินจริงๆ */
+        }
+        
+        /* 🎯 เลื่อนกล่องให้ชิดขวา เพื่อไม่ให้มันกางล้นขอบจอไปทางขวา */
+        .type-dropdown .dropdown-menu {
+          right: 0 !important;
+          left: auto !important;
+        }
+      }
       @media (max-width: 768px) {
         select.filter-box, .search-group { width: 100% !important; margin-bottom: 5px; }
         .justify-content-lg-end { justify-content: flex-start !important; }
