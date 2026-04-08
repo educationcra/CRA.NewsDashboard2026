@@ -134,7 +134,7 @@
       .progress-container { width: 250px; height: 8px; background-color: #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 15px;}
       .progress-bar-fill { height: 100%; background-color: var(--cra-blue); width: 0%; transition: width 0.3s; }
       .loader-hidden { opacity: 0; pointer-events: none; }
-.type-dropdown { width: 250px; }
+      .type-dropdown { width: 250px; }
       .type-dropdown .btn { border: 1px solid #e2e8f0; background: #f8fafc; color: var(--cra-text-main); font-size: 0.9rem; border-radius: 12px; padding: 10px 16px; text-align: left; transition: 0.2s; }
       .type-dropdown .btn:hover, .type-dropdown .btn:focus { border-color: var(--cra-blue); background: #ffffff; box-shadow: 0 0 0 3px rgba(29, 43, 83, 0.1); }
       .type-dropdown .dropdown-menu { border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 8px; }
@@ -323,32 +323,28 @@
         if(str.includes('ธันวาคม') || str.includes('ธ.ค.') || str.includes('dec')) return "12-ธันวาคม";
         return "";
       }
-  function formatThaiDate(rawDate) {
+
+      function formatThaiDate(rawDate) {
         if (!rawDate) return "";
         let str = String(rawDate).trim();
         
-        // 🎯 1. ถ้ามีตัวอักษรภาษาไทยอยู่แล้ว (เช่น "9 มี.ค. 2569") แปลว่าสวยแล้ว ให้ส่งค่าเดิมกลับไปเลย
         if (/[ก-๙]/.test(str)) {
           return str;
         }
 
-        // 🎯 2. ให้ระบบลองอ่านวันที่แบบสากล (อ่านได้ทั้ง 6 Jan 26 และ 2026-02-13 14:03)
         let d = new Date(str);
         
-        // ตรวจสอบว่ามันอ่านวันเดือนปีรู้เรื่องไหม (ถ้าไม่ใช่ค่าว่าง หรือ Invalid)
         if (!isNaN(d.getTime())) {
           let day = d.getDate();
-          let month = d.getMonth() + 1; // getMonth() เริ่มที่ 0 เลยต้องบวก 1
+          let month = d.getMonth() + 1; 
           let year = d.getFullYear();
           
-          // แปลง ค.ศ. เป็น พ.ศ. (บวก 543)
           let thaiYear = year < 2500 ? year + 543 : year;
           const thaiMonths = ["", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
           
           return `${day} ${thaiMonths[month]} ${thaiYear}`;
         }
         
-        // 🎯 3. ถ้าเจอรูปแบบแปลกๆ ที่อ่านไม่ออกจริงๆ ก็ให้แสดงข้อความดั้งเดิมเพื่อความปลอดภัย
         return str; 
       }
       
@@ -417,7 +413,6 @@
         });
 
         let currentCat = $('#filterCategory').val();
-        // 🎯 1. ดึงค่า "ประเภทข่าว" ที่ถูกติ๊กเลือกไว้ทั้งหมด (ได้ออกมาเป็น Array)
         let currentTypes = $('.type-checkbox:checked').map(function() { return this.value; }).get();
 
         let availableCategories = new Set();
@@ -425,7 +420,6 @@
         
         baseFilteredData.forEach(item => {
             availableCategories.add(item.category);
-            // 🎯 2. ถ้าเลือก "หมวดหมู่" ไว้ ให้ดึงมาเฉพาะ "ประเภท" ที่ตรงกับหมวดหมู่นั้น!
             if (currentCat && item.category !== currentCat) return;
             availableTypes.add(item.type);
         });
@@ -435,13 +429,12 @@
         if(availableCategories.has(currentCat)) {
             $('#filterCategory').val(currentCat);
         } else {
-            currentCat = ""; // รีเซ็ตถ้าเปลี่ยนหมวดหมู่ใหม่
+            currentCat = ""; 
         }
 
-        // 🎯 3. สร้างเมนู Checkbox ประเภทข่าวแบบ Dynamic
         let typeListHtml = '';
         let checkedCount = 0;
-        let validActiveTypes = []; // เก็บเฉพาะอันที่ติ๊กไว้และยังสัมพันธ์กับหมวดหมู่อยู่
+        let validActiveTypes = []; 
         
         [...availableTypes].sort().forEach(t => {
            let isChecked = currentTypes.includes(t) ? 'checked' : '';
@@ -463,7 +456,6 @@
 
         $('#filterTypeList').html(typeListHtml);
         
-        // อัปเดตข้อความบนปุ่ม
         if(checkedCount === 0) {
            $('#filterTypeBtnText').text('- ประเภทข่าว -').css({'color':'var(--cra-text-main)', 'font-weight':'normal'});
         } else {
@@ -472,10 +464,8 @@
 
         let sFilter = $('#customSearch').val().toLowerCase();
 
-        // 🎯 4. กรองข้อมูลรอบสุดท้ายเพื่อนำไปวาดกราฟ
         let finalFiltered = baseFilteredData.filter(item => {
             if (currentCat && item.category !== currentCat) return false;
-            // เช็คว่าถ้ามีการติ๊กประเภทข่าว ข่าวนี้ต้องอยู่ในรายการที่ถูกติ๊ก
             if (validActiveTypes.length > 0 && !validActiveTypes.includes(item.type)) return false;
             if (sFilter) {
                 let textToSearch = `${item.date} ${item.project_raw} ${item.category} ${item.type} ${item.source} ${item.media}`.toLowerCase();
@@ -503,13 +493,12 @@
         table.column(11).search(isSpecialChecked ? "พระกรณียกิจ" : ""); 
         table.column(4).search(currentCat); 
         
-        // 🎯 5. สั่งตารางค้นหาแบบรองรับหลายประเภทพร้อมกัน (ใช้ Regex)
         if (validActiveTypes.length > 0) {
             let escapeRegex = (s) => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
             let regexPattern = '^(' + validActiveTypes.map(escapeRegex).join('|') + ')$';
-            table.column(6).search(regexPattern, true, false); // true = เปิดใช้ระบบ Regex
+            table.column(6).search(regexPattern, true, false); 
         } else {
-            table.column(6).search(''); // ถ้าไม่ได้ติ๊กอะไรเลย ให้โชว์ทั้งหมด
+            table.column(6).search(''); 
         }
         
         table.search(sFilter).draw();
@@ -636,21 +625,15 @@
               $('#jumpInput').val(info.page + 1).attr('max', info.pages);
             });
 
-            // ✅ แก้เป็น:
-// 1. สำหรับ Select Box และ Checkbox สวิตช์ (ที่มีอยู่แล้วตั้งแต่ตอนโหลดหน้า)
-$('#filterQuarter, #filterMonth, #filterCategory, #filterSpecial').on('change', function() { 
-    updateDashboardWidgets(); 
-});
-
-// 2. สำหรับ Checkbox ประเภทข่าว (ที่ถูกสร้างขึ้นใหม่เรื่อยๆ)
-$(document).on('change', '.type-checkbox', function() { 
-    updateDashboardWidgets(); 
-});
-
-// 3. สำหรับช่องค้นหา (พิมพ์ปุ๊บ กรองปั๊บ)
-$('#customSearch').on('keyup', function() { 
-    updateDashboardWidgets(); 
-});
+            $('#filterQuarter, #filterMonth, #filterCategory, #filterSpecial').on('change', function() { 
+                updateDashboardWidgets(); 
+            });
+            $(document).on('change', '.type-checkbox', function() { 
+                updateDashboardWidgets(); 
+            });
+            $('#customSearch').on('keyup', function() { 
+                updateDashboardWidgets(); 
+            });
 
             updateDashboardWidgets();
             finishLoading();
