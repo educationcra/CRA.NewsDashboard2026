@@ -134,7 +134,13 @@
       .progress-container { width: 250px; height: 8px; background-color: #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 15px;}
       .progress-bar-fill { height: 100%; background-color: var(--cra-blue); width: 0%; transition: width 0.3s; }
       .loader-hidden { opacity: 0; pointer-events: none; }
-
+.type-dropdown { width: 250px; }
+      .type-dropdown .btn { border: 1px solid #e2e8f0; background: #f8fafc; color: var(--cra-text-main); font-size: 0.9rem; border-radius: 12px; padding: 10px 16px; text-align: left; transition: 0.2s; }
+      .type-dropdown .btn:hover, .type-dropdown .btn:focus { border-color: var(--cra-blue); background: #ffffff; box-shadow: 0 0 0 3px rgba(29, 43, 83, 0.1); }
+      .type-dropdown .dropdown-menu { border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 8px; }
+      .type-dropdown .dropdown-item { border-radius: 8px; transition: 0.2s; white-space: normal; }
+      .type-dropdown .dropdown-item:hover { background-color: #f1f5f9; }
+      .type-dropdown .form-check-input { cursor: pointer; }
       @media (max-width: 768px) {
         select.filter-box, .search-group { width: 100% !important; margin-bottom: 5px; }
         .justify-content-lg-end { justify-content: flex-start !important; }
@@ -248,9 +254,15 @@
               <option value="">- หมวดหมู่ข่าว -</option>
             </select>
             
-            <select id="filterType" class="filter-box">
-              <option value="">- ประเภทข่าว -</option>
-            </select>
+            <div class="dropdown type-dropdown">
+              <button class="btn w-100 d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                <span id="filterTypeBtnText" class="text-truncate">- ประเภทข่าว -</span>
+                <i class="bi bi-chevron-down ms-2" style="font-size: 0.8rem; color: #94a3b8;"></i>
+              </button>
+              <ul class="dropdown-menu w-100 border-0" id="filterTypeList" style="max-height: 300px; overflow-y: auto;">
+                <li><div class="px-3 py-2 text-muted small">กำลังโหลด...</div></li>
+              </ul>
+            </div>
             
             <div class="input-group search-group">
               <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
@@ -397,7 +409,6 @@
         let mFilter = $('#filterMonth').val();
         let isSpecialChecked = $('#filterSpecial').is(':checked'); 
 
-        // 1. กรองข้อมูลจากเวลาและสวิตช์ก่อน (เป็นฐานข้อมูลตั้งต้น)
         let baseFilteredData = globalData.filter(item => {
             if (qFilter && item.quarter !== qFilter) return false;
             if (mFilter && item.month !== mFilter) return false;
@@ -405,49 +416,67 @@
             return true;
         });
 
-        // 2. ดึงค่าที่ผู้ใช้กำลังเลือกอยู่ในปัจจุบัน
         let currentCat = $('#filterCategory').val();
-        let currentType = $('#filterType').val();
+        // 🎯 1. ดึงค่า "ประเภทข่าว" ที่ถูกติ๊กเลือกไว้ทั้งหมด (ได้ออกมาเป็น Array)
+        let currentTypes = $('.type-checkbox:checked').map(function() { return this.value; }).get();
 
-        // 3. 🎯 ความฉลาดอยู่ตรงนี้: เตรียมรายการ Dropdown ใหม่
         let availableCategories = new Set();
         let availableTypes = new Set();
         
         baseFilteredData.forEach(item => {
-            // หมวดหมู่ข่าว: โชว์ทั้งหมดที่มีในช่วงเวลานั้น
             availableCategories.add(item.category);
-            
-            // ประเภทข่าว: ถ้ามีการเลือก "หมวดหมู่" ไว้ ให้เอามาเฉพาะประเภทที่ตรงกับหมวดหมู่นั้น!
-            if (currentCat && item.category !== currentCat) {
-                return; // ข้ามไป ไม่เอามาใส่ Dropdown
-            }
+            // 🎯 2. ถ้าเลือก "หมวดหมู่" ไว้ ให้ดึงมาเฉพาะ "ประเภท" ที่ตรงกับหมวดหมู่นั้น!
+            if (currentCat && item.category !== currentCat) return;
             availableTypes.add(item.type);
         });
 
-        // 4. สร้างตัวเลือก หมวดหมู่ข่าว ใหม่
         $('#filterCategory').empty().append('<option value="">- หมวดหมู่ข่าว -</option>');
         [...availableCategories].sort().forEach(c => $('#filterCategory').append(new Option(c, c)));
         if(availableCategories.has(currentCat)) {
             $('#filterCategory').val(currentCat);
         } else {
-            currentCat = ""; // รีเซ็ตถ้าค่าที่เคยเลือกไม่มีในลิตส์แล้ว
+            currentCat = ""; // รีเซ็ตถ้าเปลี่ยนหมวดหมู่ใหม่
         }
 
-        // 5. สร้างตัวเลือก ประเภทข่าว ใหม่ (ที่ถูกกรองให้สัมพันธ์กับหมวดหมู่แล้ว)
-        $('#filterType').empty().append('<option value="">- ประเภทข่าว -</option>');
-        [...availableTypes].sort().forEach(t => $('#filterType').append(new Option(t, t)));
-        if(availableTypes.has(currentType)) {
-            $('#filterType').val(currentType);
+        // 🎯 3. สร้างเมนู Checkbox ประเภทข่าวแบบ Dynamic
+        let typeListHtml = '';
+        let checkedCount = 0;
+        let validActiveTypes = []; // เก็บเฉพาะอันที่ติ๊กไว้และยังสัมพันธ์กับหมวดหมู่อยู่
+        
+        [...availableTypes].sort().forEach(t => {
+           let isChecked = currentTypes.includes(t) ? 'checked' : '';
+           if(isChecked) { checkedCount++; validActiveTypes.push(t); }
+           
+           typeListHtml += `
+             <li>
+               <label class="dropdown-item d-flex align-items-start" style="cursor:pointer; font-size: 0.85rem;">
+                 <input class="form-check-input type-checkbox me-2 mt-1 flex-shrink-0" type="checkbox" value="${t}" ${isChecked}>
+                 <span>${t}</span>
+               </label>
+             </li>
+           `;
+        });
+        
+        if (availableTypes.size === 0) {
+            typeListHtml = '<li><div class="px-3 py-2 text-muted small">ไม่พบประเภทข่าว</div></li>';
+        }
+
+        $('#filterTypeList').html(typeListHtml);
+        
+        // อัปเดตข้อความบนปุ่ม
+        if(checkedCount === 0) {
+           $('#filterTypeBtnText').text('- ประเภทข่าว -').css({'color':'var(--cra-text-main)', 'font-weight':'normal'});
         } else {
-            currentType = ""; // 🎯 รีเซ็ตประเภทข่าวอัตโนมัติ ถ้ามันไม่สอดคล้องกับหมวดหมู่ใหม่
+           $('#filterTypeBtnText').text(`- เลือกแล้ว (${checkedCount}) -`).css({'color':'var(--cra-blue)', 'font-weight':'700'});
         }
 
         let sFilter = $('#customSearch').val().toLowerCase();
 
-        // 6. กรองข้อมูลรอบสุดท้าย เพื่อเอาไปวาดกราฟและตาราง
+        // 🎯 4. กรองข้อมูลรอบสุดท้ายเพื่อนำไปวาดกราฟ
         let finalFiltered = baseFilteredData.filter(item => {
             if (currentCat && item.category !== currentCat) return false;
-            if (currentType && item.type !== currentType) return false;
+            // เช็คว่าถ้ามีการติ๊กประเภทข่าว ข่าวนี้ต้องอยู่ในรายการที่ถูกติ๊ก
+            if (validActiveTypes.length > 0 && !validActiveTypes.includes(item.type)) return false;
             if (sFilter) {
                 let textToSearch = `${item.date} ${item.project_raw} ${item.category} ${item.type} ${item.source} ${item.media}`.toLowerCase();
                 if (!textToSearch.includes(sFilter)) return false;
@@ -459,7 +488,7 @@
         $('#sumPR').text(sumPr.toLocaleString('th-TH', {maximumFractionDigits:0}));
         $('#totalNews').text(finalFiltered.length);
 
-        let statusText = (qFilter || mFilter || currentCat || currentType || isSpecialChecked) ? "เฉพาะข้อมูลที่กรอง" : "รวมทั้งหมด";
+        let statusText = (qFilter || mFilter || currentCat || validActiveTypes.length > 0 || isSpecialChecked) ? "เฉพาะข้อมูลที่กรอง" : "รวมทั้งหมด";
         $('#badgeCategory, #badgeType').text(statusText);
 
         renderDonutChart('categoryChart', 'categoryLegend', 'categoryTotal', analyzeObj(finalFiltered, 'category'));
@@ -472,9 +501,19 @@
         table.column(9).search(qFilter); 
         table.column(10).search(mFilter); 
         table.column(11).search(isSpecialChecked ? "พระกรณียกิจ" : ""); 
-        table.column(4).search(currentCat); // ใช้ค่าที่ผ่านการตรวจสอบแล้ว
-        table.column(6).search(currentType); // ใช้ค่าที่ผ่านการตรวจสอบแล้ว
+        table.column(4).search(currentCat); 
+        
+        // 🎯 5. สั่งตารางค้นหาแบบรองรับหลายประเภทพร้อมกัน (ใช้ Regex)
+        if (validActiveTypes.length > 0) {
+            let escapeRegex = (s) => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            let regexPattern = '^(' + validActiveTypes.map(escapeRegex).join('|') + ')$';
+            table.column(6).search(regexPattern, true, false); // true = เปิดใช้ระบบ Regex
+        } else {
+            table.column(6).search(''); // ถ้าไม่ได้ติ๊กอะไรเลย ให้โชว์ทั้งหมด
+        }
+        
         table.search(sFilter).draw();
+      }
       }
 
       $(document).ready(function() {
@@ -598,8 +637,21 @@
               $('#jumpInput').val(info.page + 1).attr('max', info.pages);
             });
 
-            $('#filterQuarter, #filterMonth, #filterCategory, #filterType, #filterSpecial').on('change', function() { updateDashboardWidgets(); }); 
-            $('#customSearch').on('keyup', function() { updateDashboardWidgets(); });
+            // ✅ แก้เป็น:
+// 1. สำหรับ Select Box และ Checkbox สวิตช์ (ที่มีอยู่แล้วตั้งแต่ตอนโหลดหน้า)
+$('#filterQuarter, #filterMonth, #filterCategory, #filterSpecial').on('change', function() { 
+    updateDashboardWidgets(); 
+});
+
+// 2. สำหรับ Checkbox ประเภทข่าว (ที่ถูกสร้างขึ้นใหม่เรื่อยๆ)
+$(document).on('change', '.type-checkbox', function() { 
+    updateDashboardWidgets(); 
+});
+
+// 3. สำหรับช่องค้นหา (พิมพ์ปุ๊บ กรองปั๊บ)
+$('#customSearch').on('keyup', function() { 
+    updateDashboardWidgets(); 
+});
 
             updateDashboardWidgets();
             finishLoading();
