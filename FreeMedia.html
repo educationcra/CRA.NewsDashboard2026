@@ -610,6 +610,10 @@
               let rawDate = row[1];
               let date = formatThaiDate(rawDate);
               let projectTextRaw = row[2] || "";
+
+              // 🎯 ทำความสะอาดข้อความ ลบ \u000A และเครื่องหมายคำพูดแปลกๆ ที่ติดมาจากชีต
+              projectTextRaw = projectTextRaw.replace(/\\u000A/g, ' ').replace(/\n/g, ' ').replace(/"""/g, '"').replace(/''/g, "'").replace(/^"+|"+$/g, '').trim();
+
               let specialCategory = row[3] ? String(row[3]).trim() : ""; 
               let category = row[4] ? String(row[4]).trim() : "ไม่ระบุ"; 
               let type = row[5] ? String(row[5]).trim() : "ไม่ระบุ"; 
