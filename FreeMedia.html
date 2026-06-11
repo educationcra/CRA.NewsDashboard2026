@@ -624,6 +624,13 @@
               let projectUrl = row[11]; 
               let stdMonth = getStandardMonth(date);
 
+              // 🎯 [Frontend Fallback] กรณีที่หลังบ้านดึงลิงก์มาไม่สำเร็จ (หรือเกิด Error) แต่มี URL ซ่อนอยู่ในข้อความ 
+              // ให้ทำการดึง URL นั้นออกมาและลบออกจากข้อความเพื่อให้ตารางดูสะอาดตา
+              if (!projectUrl && projectTextRaw.match(/(https?:\/\/[^\s]+)/)) {
+                  projectUrl = projectTextRaw.match(/(https?:\/\/[^\s]+)/)[0];
+                  projectTextRaw = projectTextRaw.replace(projectUrl, '').trim();
+              }
+
               globalData.push({
                 date: date, project_raw: projectTextRaw, url: projectUrl,
                 special: specialCategory, 
